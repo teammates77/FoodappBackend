@@ -1,13 +1,11 @@
 package com.foodapp.restaurantservice.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Getter
 @Setter
@@ -15,30 +13,17 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
-    private Integer userId;
+	private int userid;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String phNumber;
+	private String password;
+	 @JsonProperty
+	   private Integer addressId;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
-
-    private String password;
-
-    private Integer age;
-
-    @Enumerated(value = EnumType.STRING)
-    private Gender gender;
-
-    private List<String> role = new ArrayList<>();
-
-    private String mobile;
-
-    @Transient
-    private Address address;
-
-    @Transient
-    private FoodCart foodCart;
+	    @JsonProperty
+	    private Integer foodCartId;
 
 
 }

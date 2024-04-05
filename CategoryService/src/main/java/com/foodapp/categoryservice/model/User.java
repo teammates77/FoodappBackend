@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,31 +18,19 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    
+	private int userid;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String phNumber;
+	private String password;
+	 @JsonProperty
+	   private Integer addressId;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
-
-    private String password;
-
-    private Integer age;
-
-    @Enumerated(value = EnumType.STRING)
-    private Gender gender;
-
-    private List<String> role = new ArrayList<>();
-
-    private String mobile;
-
-    @Transient
-    private Address address;
-
-    @Transient
-    private FoodCart foodCart;
+	    @JsonProperty
+	    private Integer foodCartId;
+    
 
 
 }

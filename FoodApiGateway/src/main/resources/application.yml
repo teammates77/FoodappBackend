@@ -1,0 +1,43 @@
+spring:
+ application:
+    name: FoodAPIGateway
+ cloud:
+    gateway:
+      routes:
+        - id: ADDRESS-SERVICE
+          uri: http://localhost:8087
+          predicates:
+            - Path=/fooddelivery/address/**
+        - id: CATEGORY-SERVICE
+          uri: http://localhost:8085
+          predicates:
+            - Path=/fooddelivery/category/**
+        - id: RESTAURANT-SERVICE
+          uri: http://localhost:8082
+          predicates:
+            - Path=/fooddelivery/restaurant/**
+            - Path=/fooddelivery/items/**
+        - id: FOODCART-SERVICE
+          uri: http://localhost:8084
+          predicates:
+            - Path=/fooddelivery/foodcart/**
+        - id: ORDER-SERVICE
+          uri: http://localhost:8083
+          predicates:
+            - Path=/fooddelivery/orderdetails/**
+server:
+ port: 9191
+eureka:
+ instance:
+    client:
+      serviceUrl:
+        defaultZone:  http://localhost:8761/eure
+ endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+
+
+#http://localhost:8761/eureka/  

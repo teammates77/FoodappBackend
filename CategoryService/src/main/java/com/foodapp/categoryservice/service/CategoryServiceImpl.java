@@ -13,8 +13,6 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService{
 
-//    @Autowired
-//    CategoryRepository categoryRepository;
     private final CategoryRepository categoryRepository;
     
     private static final String CATEGORY_ID_NOT_FOUND_MESSAGE = "Category does not exists with category id : ";

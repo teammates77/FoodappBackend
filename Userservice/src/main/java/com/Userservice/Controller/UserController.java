@@ -63,7 +63,7 @@ public ResponseEntity<?> createUser(@RequestBody RegistrationDTO registrationDTO
         
         // Attempt to create the user
         RegistrationDTO createdregistrationDTO = registrationService.saveUser(registrationDTO);
-        return new ResponseEntity<>("User Registration Successful", HttpStatus.CREATED);
+        return new ResponseEntity<>("Registration Successful", HttpStatus.CREATED);
     } catch (Exception e) {
         return new ResponseEntity<>("User Registration is failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -84,11 +84,11 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
         RegistrationDTO userDetails = registrationService.getUserDetailsByEmail(loginRequest.getEmail());
         if (userDetails != null) {
             LoginResponseDTO responseDTO = new LoginResponseDTO();
-            responseDTO.setUserid(userDetails.getUserid());
+            responseDTO.setUserId(userDetails.getUserId());
             responseDTO.setFirstName(userDetails.getFirstName());
             responseDTO.setLastName(userDetails.getLastName());
             responseDTO.setEmail(userDetails.getEmail());
-            responseDTO.setPhNumber(userDetails.getPhNumber());
+            responseDTO.setPhoneNumber(userDetails.getPhoneNumber());
             responseDTO.setAddress(userDetails.getAddress());
  
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -99,10 +99,10 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
         return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }
 }
-@GetMapping("/{id}")
-public ResponseEntity<?> getUserById(@PathVariable int id) {
+@GetMapping("/{userId}")
+public ResponseEntity<?> getUserById(@PathVariable int userId) {
     try {
-        RegistrationDTO userDetails = registrationService.getUserDetailsById(id);
+        RegistrationDTO userDetails = registrationService.getUserDetailsById(userId);
         if (userDetails != null) {
             LoginResponseDTO responseDTO = modelMapper.map(userDetails, LoginResponseDTO.class);
             return ResponseEntity.ok(responseDTO);
@@ -115,11 +115,11 @@ public ResponseEntity<?> getUserById(@PathVariable int id) {
     }
 }
 
-@PutMapping("/updateProfile/{id}")
-public ResponseEntity<?> updateProfile(@PathVariable int id, @Valid @RequestBody LoginResponseDTO responseDTO) {
+@PutMapping("/updateProfile/{userId}")
+public ResponseEntity<?> updateProfile(@PathVariable int userId, @Valid @RequestBody LoginResponseDTO responseDTO) {
     try {
         // Retrieve the user from the registration service
-        Optional<User> optionalUser = registrationService.getUserById(id);
+        Optional<User> optionalUser = registrationService.getUserById(userId);
         if (!optionalUser.isPresent()) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
@@ -128,7 +128,7 @@ public ResponseEntity<?> updateProfile(@PathVariable int id, @Valid @RequestBody
         User existingUser = optionalUser.get();
         existingUser.setFirstName(responseDTO.getFirstName());
         existingUser.setLastName(responseDTO.getLastName());
-        existingUser.setPhNumber(responseDTO.getPhNumber());
+        existingUser.setPhoneNumber(responseDTO.getPhoneNumber());
         existingUser.setEmail(responseDTO.getEmail());
 
         // Update the address
@@ -144,7 +144,7 @@ public ResponseEntity<?> updateProfile(@PathVariable int id, @Valid @RequestBody
 
         // Map the updated user to response DTO
 		LoginResponseDTO updatedLoginResponseDTO = modelMapper.map(updatedUser, LoginResponseDTO.class);
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return new ResponseEntity<>("User Profile Updated", HttpStatus.OK);
     } catch (Exception e) {
         return new ResponseEntity<>("Failed to update profile: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

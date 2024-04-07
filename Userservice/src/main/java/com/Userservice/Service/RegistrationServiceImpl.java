@@ -52,7 +52,7 @@ private EmailService email;
 				"Registration Successful");
 		// Save user's cart
 		FoodCartDTO foodCartDTO = new FoodCartDTO();
-		foodCartDTO.setUserId(savedUser.getUserid());
+		foodCartDTO.setUserId(savedUser.getUserId());
 		FoodCartDTO savedCartDto = cartService.saveFoodCart(foodCartDTO);
 		
 		// Save user's address
@@ -73,7 +73,10 @@ private EmailService email;
         // Fetch and set the address using the Feign client
         Address address = addressService.getAddress(user.getAddressId());
         loginResponseDTO.setAddress(address);
+        //FoodCart foodCart = cartService.get
         return loginResponseDTO;
+        
+        
     }
 	@Override
 	public boolean validateLogin(LoginDTO loginRequest) {
@@ -96,8 +99,8 @@ private EmailService email;
         return userRepo.existsByEmail(email);
     }
 	@Override
-    public Optional<User> getUserById(int id) {
-        return userRepo.findById(id);
+    public Optional<User> getUserById(int userId) {
+        return userRepo.findById(userId);
     }
 
     @Override
@@ -111,12 +114,11 @@ private EmailService email;
 
 	    if (user != null) {
 	        RegistrationDTO userDetails = new RegistrationDTO();
-	        userDetails.setUserid(user.getUserid());
+	        userDetails.setUserId(user.getUserId());
 	        userDetails.setFirstName(user.getFirstName());
 	        userDetails.setLastName(user.getLastName());
 	        userDetails.setEmail(user.getEmail());
-	        userDetails.setPhNumber(user.getPhNumber());
-	        
+	        userDetails.setPhoneNumber(user.getPhoneNumber());
 	        // Fetch the address using Feign client
 	        Address address = addressService.getAddress(user.getAddressId());
 	        userDetails.setAddress(address);
@@ -132,11 +134,11 @@ private EmailService email;
 
         RegistrationDTO registrationDTO = new RegistrationDTO();
 
-        registrationDTO.setUserid(user.getUserid());
+        registrationDTO.setUserId(user.getUserId());
         registrationDTO.setFirstName(user.getFirstName());
         registrationDTO.setLastName(user.getLastName());
         registrationDTO.setEmail(user.getEmail());
-        registrationDTO.setPhNumber(user.getPhNumber());
+        registrationDTO.setPhoneNumber(user.getPhoneNumber());
         registrationDTO.setPassword(user.getPassword());
         registrationDTO.setAddress(address);
 
@@ -144,8 +146,8 @@ private EmailService email;
 
     }
 @Override
-	public RegistrationDTO getUserDetailsById(int id) {
-	    Optional<User> optionalUser = userRepo.findById(id);
+	public RegistrationDTO getUserDetailsById(int userId) {
+	    Optional<User> optionalUser = userRepo.findById(userId);
 	    if (optionalUser.isPresent()) {
 	        User user = optionalUser.get();
 	        
@@ -154,11 +156,11 @@ private EmailService email;
 	        
 	        // Create RegistrationDTO and set user details along with the address
 	        RegistrationDTO userDetails = new RegistrationDTO();
-	        userDetails.setUserid(user.getUserid());
+	        userDetails.setUserId(user.getUserId());
 	        userDetails.setFirstName(user.getFirstName());
 	        userDetails.setLastName(user.getLastName());
 	        userDetails.setEmail(user.getEmail());
-	        userDetails.setPhNumber(user.getPhNumber());
+	        userDetails.setPhoneNumber(user.getPhoneNumber());
 	        userDetails.setAddress(address);
 	        
 	        return userDetails;

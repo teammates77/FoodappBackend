@@ -18,11 +18,11 @@ import lombok.NoArgsConstructor;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int userid;
+	private int userId;
 	private String firstName;
 	private String lastName;
 	private String email;
-	private String phNumber;
+	private String phoneNumber;
 	private String password;
 	 @JsonProperty
 	   private Integer addressId;

@@ -84,7 +84,7 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
         RegistrationDTO userDetails = registrationService.getUserDetailsByEmail(loginRequest.getEmail());
         if (userDetails != null) {
             LoginResponseDTO responseDTO = new LoginResponseDTO();
-            responseDTO.setUserId(userDetails.getUserId());
+            responseDTO.setUserid(userDetails.getUserid());
             responseDTO.setFirstName(userDetails.getFirstName());
             responseDTO.setLastName(userDetails.getLastName());
             responseDTO.setEmail(userDetails.getEmail());
@@ -99,10 +99,10 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
         return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }
 }
-@GetMapping("/{userId}")
-public ResponseEntity<?> getUserById(@PathVariable int userId) {
+@GetMapping("/{id}")
+public ResponseEntity<?> getUserById(@PathVariable int id) {
     try {
-        RegistrationDTO userDetails = registrationService.getUserDetailsById(userId);
+        RegistrationDTO userDetails = registrationService.getUserDetailsById(id);
         if (userDetails != null) {
             LoginResponseDTO responseDTO = modelMapper.map(userDetails, LoginResponseDTO.class);
             return ResponseEntity.ok(responseDTO);
@@ -115,11 +115,11 @@ public ResponseEntity<?> getUserById(@PathVariable int userId) {
     }
 }
 
-@PutMapping("/updateProfile/{userId}")
-public ResponseEntity<?> updateProfile(@PathVariable int userId, @Valid @RequestBody LoginResponseDTO responseDTO) {
+@PutMapping("/updateProfile/{id}")
+public ResponseEntity<?> updateProfile(@PathVariable int id, @Valid @RequestBody LoginResponseDTO responseDTO) {
     try {
         // Retrieve the user from the registration service
-        Optional<User> optionalUser = registrationService.getUserById(userId);
+        Optional<User> optionalUser = registrationService.getUserById(id);
         if (!optionalUser.isPresent()) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
@@ -144,7 +144,7 @@ public ResponseEntity<?> updateProfile(@PathVariable int userId, @Valid @Request
 
         // Map the updated user to response DTO
 		LoginResponseDTO updatedLoginResponseDTO = modelMapper.map(updatedUser, LoginResponseDTO.class);
-        return new ResponseEntity<>("User Profile Updated", HttpStatus.OK);
+        return new ResponseEntity<>("Profile Updated Successfully", HttpStatus.OK);
     } catch (Exception e) {
         return new ResponseEntity<>("Failed to update profile: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

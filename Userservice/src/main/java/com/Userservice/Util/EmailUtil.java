@@ -11,8 +11,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 @Component
 public class EmailUtil {
-	@Autowired
-	  private JavaMailSender javaMailSender;
+
+private final JavaMailSender javaMailSender;
+@Autowired
+public EmailUtil (JavaMailSender javaMailSender) {
+	this.javaMailSender = javaMailSender;
+}
 	 public void sendSetPasswordEmail(String email) throws MessagingException {
 		    MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 		    MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);

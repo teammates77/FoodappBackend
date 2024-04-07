@@ -27,17 +27,16 @@ private final ModelMapper modelMapper;
 private final BCryptPasswordEncoder passwordEncoder;
 private final AddressService addressService;
 private final CartService cartService;
-
-@Autowired
-private EmailService email;
+private final EmailService email;
   
 	@Autowired
-	public RegistrationServiceImpl(UserRepo userRepo, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder, AddressService addressService, CartService cartService) {
+	public RegistrationServiceImpl(UserRepo userRepo, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder, AddressService addressService, CartService cartService, EmailService email) {
 		this.userRepo = userRepo;
 		this.modelMapper = modelMapper;
 		this.passwordEncoder = passwordEncoder;
 		this.cartService = cartService;
 		this.addressService = addressService;
+		this.email = email;
 }
 	
 	@Override
@@ -52,7 +51,7 @@ private EmailService email;
 				"Registration Successful");
 		// Save user's cart
 		FoodCartDTO foodCartDTO = new FoodCartDTO();
-		foodCartDTO.setUserId(savedUser.getUserId());
+		foodCartDTO.setUserId(savedUser.getUserid());
 		FoodCartDTO savedCartDto = cartService.saveFoodCart(foodCartDTO);
 		
 		// Save user's address
@@ -99,8 +98,8 @@ private EmailService email;
         return userRepo.existsByEmail(email);
     }
 	@Override
-    public Optional<User> getUserById(int userId) {
-        return userRepo.findById(userId);
+    public Optional<User> getUserById(int id) {
+        return userRepo.findById(id);
     }
 
     @Override
@@ -114,11 +113,12 @@ private EmailService email;
 
 	    if (user != null) {
 	        RegistrationDTO userDetails = new RegistrationDTO();
-	        userDetails.setUserId(user.getUserId());
+	        userDetails.setUserid(user.getUserid());
 	        userDetails.setFirstName(user.getFirstName());
 	        userDetails.setLastName(user.getLastName());
 	        userDetails.setEmail(user.getEmail());
 	        userDetails.setPhoneNumber(user.getPhoneNumber());
+	        
 	        // Fetch the address using Feign client
 	        Address address = addressService.getAddress(user.getAddressId());
 	        userDetails.setAddress(address);
@@ -134,7 +134,7 @@ private EmailService email;
 
         RegistrationDTO registrationDTO = new RegistrationDTO();
 
-        registrationDTO.setUserId(user.getUserId());
+        registrationDTO.setUserid(user.getUserid());
         registrationDTO.setFirstName(user.getFirstName());
         registrationDTO.setLastName(user.getLastName());
         registrationDTO.setEmail(user.getEmail());
@@ -146,8 +146,8 @@ private EmailService email;
 
     }
 @Override
-	public RegistrationDTO getUserDetailsById(int userId) {
-	    Optional<User> optionalUser = userRepo.findById(userId);
+	public RegistrationDTO getUserDetailsById(int id) {
+	    Optional<User> optionalUser = userRepo.findById(id);
 	    if (optionalUser.isPresent()) {
 	        User user = optionalUser.get();
 	        
@@ -156,7 +156,7 @@ private EmailService email;
 	        
 	        // Create RegistrationDTO and set user details along with the address
 	        RegistrationDTO userDetails = new RegistrationDTO();
-	        userDetails.setUserId(user.getUserId());
+	        userDetails.setUserid(user.getUserid());
 	        userDetails.setFirstName(user.getFirstName());
 	        userDetails.setLastName(user.getLastName());
 	        userDetails.setEmail(user.getEmail());

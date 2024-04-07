@@ -1,7 +1,6 @@
 package com.Userservice.DTO;
 
 import com.Userservice.model.Address;
-import com.Userservice.model.FoodCart;
 
 import jakarta.persistence.Embedded;
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.Data;
 public class LoginResponseDTO {
 
 
-	private int userId;
+	private Integer userid;
 	private String firstName;
 	private String lastName;
 	private String email;

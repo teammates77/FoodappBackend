@@ -15,14 +15,16 @@ import lombok.Setter;
 public class RestaurantsInItemDTO {
 
     private Integer restaurantId;
-
+    private Integer merchantId;
     private String restaurantName;
 
     private Address address;
     
-    private String restaurant_image_Url;
+    private String Restaurant_image_Url;
 
     private String managerName;
 
     private String contact;
+   
+	
 }

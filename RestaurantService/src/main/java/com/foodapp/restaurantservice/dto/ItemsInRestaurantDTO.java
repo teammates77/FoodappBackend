@@ -24,7 +24,7 @@ public class ItemsInRestaurantDTO {
 
     private Double cost;
     
-    private String ItemImageUrl;
+    private String ItemimageUrl;
     
     private String description;
     

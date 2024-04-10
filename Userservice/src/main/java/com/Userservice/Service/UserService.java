@@ -24,19 +24,19 @@ public class UserService {
     public String forgotPassword(String email) {
         User user = userRepo.findByEmail(email);
         if (user == null) {
-            throw new  IllegalArgumentException("User not found with this email: " + email);
+            throw new RuntimeException("User not found with this email: " + email);
         }
         try {
             emailUtil.sendSetPasswordEmail(email);
         } catch (MessagingException e) {
-            throw new  IllegalArgumentException("Unable to send set password Link. Please try again.");
+            throw new RuntimeException("Unable to send set password Link. Please try again.");
         }
-        return "Please check your email to set a new password.";
+        return (email);
     }
     public String setPassword(String email, String newPassword) {
         User user = userRepo.findByEmail(email);
         if (user == null) {
-            throw new  IllegalArgumentException("User not found with this email: " + email);
+            throw new RuntimeException("User not found with this email: " + email);
         }
         // Encrypt the password before saving
         String encryptedPassword = passwordEncoder.encode(newPassword);

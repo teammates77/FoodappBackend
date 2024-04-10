@@ -18,16 +18,18 @@ import lombok.NoArgsConstructor;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userid;
+	private Integer userId;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String phoneNumber;
 	private String password;
-	 @JsonProperty
-	   private Integer addressId;
-
-	    @JsonProperty
-	    private Integer foodCartId;
+    private String addressLine;
+    private String city;
+    private String state;
+    private String country;
+    private Integer pinCode;
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Integer foodCartId;
 
 }

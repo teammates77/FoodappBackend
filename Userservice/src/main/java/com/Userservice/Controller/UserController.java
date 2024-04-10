@@ -22,11 +22,10 @@ import com.Userservice.DTO.LoginDTO;
 import com.Userservice.DTO.LoginResponseDTO;
 import com.Userservice.DTO.RegistrationDTO;
 import com.Userservice.DTO.SetPasswordRequest;
-import com.Userservice.Service.AddressService;
 import com.Userservice.Service.RegistrationService;
 import com.Userservice.Service.UserService;
 import com.Userservice.model.User;
-import com.Userservice.model.Address;
+
 
 import jakarta.validation.Valid;
 @Validated
@@ -38,14 +37,12 @@ public class UserController {
     private final RegistrationService registrationService;
     private final ModelMapper modelMapper;
     private final UserService userService;
-    private final AddressService addressService;
 
     @Autowired
-    public UserController(RegistrationService registrationService, ModelMapper modelMapper, UserService userService, AddressService addressService) {
+    public UserController(RegistrationService registrationService, ModelMapper modelMapper, UserService userService) {
         this.registrationService = registrationService;
         this.modelMapper = modelMapper;
         this.userService = userService;
-        this.addressService = addressService;
     }
 
 @PostMapping("/register")
@@ -63,11 +60,12 @@ public ResponseEntity<?> createUser(@RequestBody RegistrationDTO registrationDTO
         
         // Attempt to create the user
         RegistrationDTO createdregistrationDTO = registrationService.saveUser(registrationDTO);
-        return new ResponseEntity<>("Registration Successful", HttpStatus.CREATED);
+        return new ResponseEntity<>(createdregistrationDTO, HttpStatus.CREATED);
     } catch (Exception e) {
         return new ResponseEntity<>("User Registration is failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+    
 @GetMapping("/all")
 public ResponseEntity<List<RegistrationDTO>> getAllUsers() {
     List<RegistrationDTO> users = registrationService.getAllUsers();
@@ -84,12 +82,17 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
         RegistrationDTO userDetails = registrationService.getUserDetailsByEmail(loginRequest.getEmail());
         if (userDetails != null) {
             LoginResponseDTO responseDTO = new LoginResponseDTO();
-            responseDTO.setUserid(userDetails.getUserid());
+            responseDTO.setUserId(userDetails.getUserId());
             responseDTO.setFirstName(userDetails.getFirstName());
             responseDTO.setLastName(userDetails.getLastName());
             responseDTO.setEmail(userDetails.getEmail());
             responseDTO.setPhoneNumber(userDetails.getPhoneNumber());
-            responseDTO.setAddress(userDetails.getAddress());
+            responseDTO.setAddressLine(userDetails.getAddressLine());
+            responseDTO.setCity(userDetails.getCity());
+            responseDTO.setState(userDetails.getState());
+            responseDTO.setCountry(userDetails.getCountry());
+            responseDTO.setPinCode(userDetails.getPinCode());
+            responseDTO.setFoodCartId(userDetails.getFoodcartId());
  
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } else {
@@ -99,10 +102,10 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
         return new ResponseEntity<>("Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }
 }
-@GetMapping("/{id}")
-public ResponseEntity<?> getUserById(@PathVariable int id) {
+@GetMapping("/{userId}")
+public ResponseEntity<?> getUserById(@PathVariable Integer userId) {
     try {
-        RegistrationDTO userDetails = registrationService.getUserDetailsById(id);
+        RegistrationDTO userDetails = registrationService.getUserDetailsById(userId);
         if (userDetails != null) {
             LoginResponseDTO responseDTO = modelMapper.map(userDetails, LoginResponseDTO.class);
             return ResponseEntity.ok(responseDTO);
@@ -115,36 +118,24 @@ public ResponseEntity<?> getUserById(@PathVariable int id) {
     }
 }
 
-@PutMapping("/updateProfile/{id}")
-public ResponseEntity<?> updateProfile(@PathVariable int id, @Valid @RequestBody LoginResponseDTO responseDTO) {
+@PutMapping("/updateProfile/{userId}")
+public ResponseEntity<?> updateProfile(@PathVariable Integer userId, @Valid @RequestBody LoginResponseDTO responseDTO) {
     try {
         // Retrieve the user from the registration service
-        Optional<User> optionalUser = registrationService.getUserById(id);
-        if (!optionalUser.isPresent()) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
-
-        // Update user details
+        Optional<User> optionalUser = registrationService.getUserById(userId);
         User existingUser = optionalUser.get();
         existingUser.setFirstName(responseDTO.getFirstName());
         existingUser.setLastName(responseDTO.getLastName());
         existingUser.setPhoneNumber(responseDTO.getPhoneNumber());
         existingUser.setEmail(responseDTO.getEmail());
-
-        // Update the address
-        Address address = responseDTO.getAddress();
-        if (address != null) {
-            // Call the Feign client to update the address
-            addressService.updateAddress(address);
-            // Assuming the updateAddress method in the Feign client interface handles updating the address
-        }
-
+        existingUser.setAddressLine(responseDTO.getAddressLine());
+        existingUser.setCity(responseDTO.getCity());
+        existingUser.setState(responseDTO.getState());
+        existingUser.setCountry(responseDTO.getCountry());
+        existingUser.setPinCode(responseDTO.getPinCode());
         // Save the updated user
-        User updatedUser = registrationService.updateUser(existingUser);
-
-        // Map the updated user to response DTO
-		LoginResponseDTO updatedLoginResponseDTO = modelMapper.map(updatedUser, LoginResponseDTO.class);
-        return new ResponseEntity<>("Profile Updated Successfully", HttpStatus.OK);
+        //User updatedUser = registrationService.updateUser(existingUser);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     } catch (Exception e) {
         return new ResponseEntity<>("Failed to update profile: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -166,6 +157,11 @@ public ResponseEntity<String> setPassword(@RequestBody SetPasswordRequest reques
     }
  
     return new ResponseEntity<>(userService.setPassword(email, newPassword), HttpStatus.OK);
+}
+@GetMapping("/find-by-email/{email}")
+public ResponseEntity<User> findByEmail(@PathVariable String email) {
+    User user = userService.findByEmail(email);
+    return ResponseEntity.ok(user);
 }
 }
 

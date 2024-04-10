@@ -1,6 +1,5 @@
 package com.foodapp.restaurantservice.dto;
 
-import com.foodapp.restaurantservice.model.Address;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,17 +13,26 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RestaurantsInItemDTO {
 
-    private Integer restaurantId;
-    private Integer merchantId;
-    private String restaurantName;
+	   private Integer restaurantId;
+	   
+	    private Integer merchantId;
+	    
+	    private String restaurantName;
+	    
+	    private String Restaurant_image_Url;
 
-    private Address address;
-    
-    private String Restaurant_image_Url;
+	    private String managerName;
 
-    private String managerName;
+	    private String contact;
+	    
+	    private String addressLine;
 
-    private String contact;
-   
+	    private String city;
+
+	    private String state;
+
+	    private String country;
+
+	    private Integer pinCode;
 	
 }

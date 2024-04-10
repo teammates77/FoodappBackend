@@ -55,18 +55,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 
     }
-//    @ExceptionHandler(BadCredentialsException.class)
-//    public ResponseEntity<ErrorDetails> busExceptionHandler(BadCredentialsException exc, WebRequest req){
-//
-//        ErrorDetails errorDetails = new ErrorDetails();
-//
-//        errorDetails.setTimeSpan(LocalDateTime.now());
-//        errorDetails.setMessage(exc.getMessage());
-//        errorDetails.setDescription(req.getDescription(false));
-//
-//        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-//
-//    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> genericExceptionHandler(Exception exc, WebRequest req){
 
@@ -80,19 +69,7 @@ public class GlobalExceptionHandler {
 
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<ErrorDetails> methodArgumentExceptionHandler(MethodArgumentNotValidException me, WebRequest req)  {
-//
-//        ErrorDetails errorDetails=new ErrorDetails();
-//
-//        errorDetails.setTimeSpan(LocalDateTime.now());
-//        errorDetails.setDescription(req.getDescription(false));
-//        errorDetails.setMessage(me.getBindingResult().getFieldError().getDefaultMessage());
-//
-//        return new ResponseEntity<>(errorDetails,HttpStatus.BAD_REQUEST);
-//
-//    }
-    
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDetails> methodArgumentExceptionHandler(MethodArgumentNotValidException me, WebRequest req)  {
         ErrorDetails errorDetails = new ErrorDetails();

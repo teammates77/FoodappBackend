@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.foodapp.restaurantservice.model.Address;
 
 @Getter
 @Setter
@@ -18,11 +17,8 @@ import com.foodapp.restaurantservice.model.Address;
 public class RestaurantDTO {
 
     private Integer restaurantId;
-
+    private Integer merchantId;
     private String restaurantName;
-
-    @Embedded
-    private Address address;
 
     private List<ItemsInRestaurantDTO> items = new ArrayList<>();
     
@@ -31,4 +27,17 @@ public class RestaurantDTO {
     private String managerName;
 
     private String contact;
+    
+    private String addressLine;
+
+    private String city;
+
+    private String state;
+
+    private String country;
+
+    private Integer pinCode;
 }
+
+
+

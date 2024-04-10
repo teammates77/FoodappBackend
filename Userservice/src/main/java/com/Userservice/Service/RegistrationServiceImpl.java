@@ -27,17 +27,16 @@ private final ModelMapper modelMapper;
 private final BCryptPasswordEncoder passwordEncoder;
 private final AddressService addressService;
 private final CartService cartService;
-
-@Autowired
-private EmailService email;
+private final EmailService email;
   
 	@Autowired
-	public RegistrationServiceImpl(UserRepo userRepo, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder, AddressService addressService, CartService cartService) {
+	public RegistrationServiceImpl(UserRepo userRepo, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder, AddressService addressService, CartService cartService, EmailService email) {
 		this.userRepo = userRepo;
 		this.modelMapper = modelMapper;
 		this.passwordEncoder = passwordEncoder;
 		this.cartService = cartService;
 		this.addressService = addressService;
+		this.email = email;
 }
 	
 	@Override
@@ -73,7 +72,10 @@ private EmailService email;
         // Fetch and set the address using the Feign client
         Address address = addressService.getAddress(user.getAddressId());
         loginResponseDTO.setAddress(address);
+        //FoodCart foodCart = cartService.get
         return loginResponseDTO;
+        
+        
     }
 	@Override
 	public boolean validateLogin(LoginDTO loginRequest) {
@@ -115,7 +117,7 @@ private EmailService email;
 	        userDetails.setFirstName(user.getFirstName());
 	        userDetails.setLastName(user.getLastName());
 	        userDetails.setEmail(user.getEmail());
-	        userDetails.setPhNumber(user.getPhNumber());
+	        userDetails.setPhoneNumber(user.getPhoneNumber());
 	        
 	        // Fetch the address using Feign client
 	        Address address = addressService.getAddress(user.getAddressId());
@@ -136,7 +138,7 @@ private EmailService email;
         registrationDTO.setFirstName(user.getFirstName());
         registrationDTO.setLastName(user.getLastName());
         registrationDTO.setEmail(user.getEmail());
-        registrationDTO.setPhNumber(user.getPhNumber());
+        registrationDTO.setPhoneNumber(user.getPhoneNumber());
         registrationDTO.setPassword(user.getPassword());
         registrationDTO.setAddress(address);
 
@@ -158,7 +160,7 @@ private EmailService email;
 	        userDetails.setFirstName(user.getFirstName());
 	        userDetails.setLastName(user.getLastName());
 	        userDetails.setEmail(user.getEmail());
-	        userDetails.setPhNumber(user.getPhNumber());
+	        userDetails.setPhoneNumber(user.getPhoneNumber());
 	        userDetails.setAddress(address);
 	        
 	        return userDetails;

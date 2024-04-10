@@ -11,13 +11,17 @@ public interface RestaurantService {
 
     public RestaurantsInItemDTO addRestaurant(RestaurantsInItemDTO restaurant);
 
-    public Restaurant updateRestaurant(Restaurant restaurant);
+    //public Restaurant updateRestaurant(Restaurant restaurant);
 
     public Restaurant removeRestaurant(Integer restaurantId);
 
     public RestaurantDTO viewRestaurant(Integer restaurantId);
 
 	public List<RestaurantInfoDTO> getAllRestaurants();
+
+	RestaurantsInItemDTO updateRestaurant(RestaurantsInItemDTO restaurantDTO);
+
+	public RestaurantsInItemDTO getRestaurantByMerchantId(Integer merchantId);
 
 
     //public List<Restaurant> viewRestaurantByLocation(String location);

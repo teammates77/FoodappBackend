@@ -63,7 +63,7 @@ public ResponseEntity<?> createUser(@RequestBody RegistrationDTO registrationDTO
         
         // Attempt to create the user
         RegistrationDTO createdregistrationDTO = registrationService.saveUser(registrationDTO);
-        return new ResponseEntity<>("User Registration Successful", HttpStatus.CREATED);
+        return new ResponseEntity<>("Registration Successful", HttpStatus.CREATED);
     } catch (Exception e) {
         return new ResponseEntity<>("User Registration is failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -88,7 +88,7 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
             responseDTO.setFirstName(userDetails.getFirstName());
             responseDTO.setLastName(userDetails.getLastName());
             responseDTO.setEmail(userDetails.getEmail());
-            responseDTO.setPhNumber(userDetails.getPhNumber());
+            responseDTO.setPhoneNumber(userDetails.getPhoneNumber());
             responseDTO.setAddress(userDetails.getAddress());
  
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -128,7 +128,7 @@ public ResponseEntity<?> updateProfile(@PathVariable int id, @Valid @RequestBody
         User existingUser = optionalUser.get();
         existingUser.setFirstName(responseDTO.getFirstName());
         existingUser.setLastName(responseDTO.getLastName());
-        existingUser.setPhNumber(responseDTO.getPhNumber());
+        existingUser.setPhoneNumber(responseDTO.getPhoneNumber());
         existingUser.setEmail(responseDTO.getEmail());
 
         // Update the address
@@ -144,7 +144,7 @@ public ResponseEntity<?> updateProfile(@PathVariable int id, @Valid @RequestBody
 
         // Map the updated user to response DTO
 		LoginResponseDTO updatedLoginResponseDTO = modelMapper.map(updatedUser, LoginResponseDTO.class);
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return new ResponseEntity<>("Profile Updated Successfully", HttpStatus.OK);
     } catch (Exception e) {
         return new ResponseEntity<>("Failed to update profile: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

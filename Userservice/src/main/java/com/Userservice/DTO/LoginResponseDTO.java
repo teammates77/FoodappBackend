@@ -8,11 +8,12 @@ import lombok.Data;
 public class LoginResponseDTO {
 
 
-	private int userid;
+	private Integer userid;
 	private String firstName;
 	private String lastName;
 	private String email;
-	private String phNumber;
+	private String phoneNumber;
 	@Embedded
 	private Address address;
+	
 }

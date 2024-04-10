@@ -8,11 +8,11 @@ import lombok.Data;
 
 @Data
 public class RegistrationDTO {
-	private int userid;
+	private Integer userid;
 	private String firstName;
 	private String lastName;
 	private String email;
-	private String phNumber;
+	private String phoneNumber;
 	private String password;
 	@Embedded
 	private Address address;

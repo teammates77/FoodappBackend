@@ -22,7 +22,7 @@ public class UpdateItemDTO {
 
     private Double cost;
     
-    private String ItemImageUrl;
+    private String itemImageUrl;
     
     private String description;
     

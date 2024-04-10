@@ -34,11 +34,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
-	@Autowired
-	private JavaMailSender mailSender;
-
 	
-
+private final JavaMailSender mailSender;
+@Autowired
+public EmailService (JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+}
 	public void sendSimpleEmail(String email, String body, String subject) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom("foodfunapp@gmail.com");

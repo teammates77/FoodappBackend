@@ -1,20 +1,22 @@
 package com.Userservice.DTO;
 
 
-import com.Userservice.model.Address;
 
-import jakarta.persistence.Embedded;
 import lombok.Data;
 
 @Data
 public class RegistrationDTO {
-	private Integer userid;
+	private Integer userId;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String phoneNumber;
 	private String password;
-	@Embedded
-	private Address address;
+	private String addressLine;
+    private String city;
+    private String state;
+    private String country;
+    private Integer pinCode;
+	private Integer FoodcartId;
 
 }

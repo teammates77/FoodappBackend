@@ -19,8 +19,6 @@ public interface RegistrationService {
 
 	boolean existsByEmail(String email);
 
-	Optional<User> getUserById(int id);
-
 	User updateUser(User user);
 
 	User getUserByEmail(String email);
@@ -29,7 +27,9 @@ public interface RegistrationService {
 
 	RegistrationDTO saveUser(RegistrationDTO registrationDTO);
 
-	RegistrationDTO getUserDetailsById(int id);
+	Optional<User> getUserById(Integer userId);
+
+	RegistrationDTO getUserDetailsById(Integer userId);
 
 
 }

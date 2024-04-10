@@ -18,7 +18,7 @@ import com.foodapp.restaurantservice.model.Address;
 public class RestaurantDTO {
 
     private Integer restaurantId;
-
+    private Integer merchantId;
     private String restaurantName;
 
     @Embedded
@@ -32,3 +32,6 @@ public class RestaurantDTO {
 
     private String contact;
 }
+
+
+

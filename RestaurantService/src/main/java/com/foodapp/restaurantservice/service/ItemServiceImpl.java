@@ -134,7 +134,7 @@ public class ItemServiceImpl implements ItemService{
     
     
     
-    //to skip the repeating resturant details 
+    //to skip the repeating restaurant details 
     public ItemsInRestaurantDTO getDtoFromItemexceptrestAddress(Item item){
 
         ItemsInRestaurantDTO itemDTO = new ItemsInRestaurantDTO();
@@ -144,7 +144,7 @@ public class ItemServiceImpl implements ItemService{
         itemDTO.setItemName(item.getItemName());
 
         itemDTO.setCost(item.getCost());
-        itemDTO.setItemImageUrl(item.getItemimageUrl());
+        itemDTO.setItemimageUrl(item.getItemimageUrl());
         itemDTO.setDescription(item.getDescription());
         Category category = validateCategory(item.getCategoryId());
         itemDTO.setCategory(category);

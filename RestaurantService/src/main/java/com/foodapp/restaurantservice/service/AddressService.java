@@ -16,5 +16,8 @@ public interface AddressService {
 
     @DeleteMapping("/fooddelivery/address/{addressId}")
     public Address deleteAddress(@PathVariable Integer addressId);
-
+    
+    @PutMapping("/fooddelivery/address")
+    public Address updateAddress(@RequestBody Address address);
+    
 }

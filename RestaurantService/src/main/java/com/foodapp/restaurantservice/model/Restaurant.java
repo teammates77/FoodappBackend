@@ -21,6 +21,8 @@ public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer restaurantId;
+    
+    private Integer merchantId;
 
     private String restaurantName;
 
@@ -39,3 +41,6 @@ public class Restaurant {
     private List<Item> items = new ArrayList<>();
 
 }
+
+
+

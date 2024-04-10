@@ -19,6 +19,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 	@Query("SELECT new com.foodapp.restaurantservice.dto.RestaurantInfoDTO(r.restaurantId, r.restaurantName, r.contact, r.restaurant_image_Url, r.managerName) FROM Restaurant r")
 	List<RestaurantInfoDTO> findAllRestaurants();
 
+	Restaurant findByMerchantId(Integer merchantId);
+
 
 
 //    @Query("SELECT new RestaurantsInItemDTO(r.restaurantId, r.restaurantName, r.managerName, r.contact) from Restaurant r INNER JOIN r.items i where i.itemId = :itemId")

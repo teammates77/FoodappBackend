@@ -5,13 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.foodapp.restaurantservice.dto.ItemsInRestaurantDTO;
-import com.foodapp.restaurantservice.dto.MerchantRestaurantDTO;
+
 import com.foodapp.restaurantservice.dto.RestaurantDTO;
 import com.foodapp.restaurantservice.dto.RestaurantInfoDTO;
 import com.foodapp.restaurantservice.dto.RestaurantsInItemDTO;
-import com.foodapp.restaurantservice.exceptions.AddressException;
 import com.foodapp.restaurantservice.exceptions.RestaurantException;
-import com.foodapp.restaurantservice.model.Address;
 import com.foodapp.restaurantservice.model.Item;
 import com.foodapp.restaurantservice.model.Restaurant;
 import com.foodapp.restaurantservice.repository.ItemRepository;
@@ -28,60 +26,70 @@ public class RestaurantServiceImpl implements RestaurantService{
 	  private final RestaurantRepository restaurantRepository;
 	    private final ItemRepository itemRepository;
 	    private final ItemService itemService;
-	    private final AddressService addressService;
+	   
 
 	    @Autowired
 	    public RestaurantServiceImpl(RestaurantRepository restaurantRepository,
 	                       ItemRepository itemRepository,
-	                       ItemService itemService,
-	                       AddressService addressService) {
+	                       ItemService itemService
+	                      ) {
 	        this.restaurantRepository = restaurantRepository;
 	        this.itemRepository = itemRepository;
 	        this.itemService = itemService;
-	        this.addressService = addressService;
+	      
 	    }
 
     @Override
     public RestaurantsInItemDTO addRestaurant(RestaurantsInItemDTO restaurantDTO) {
-
-        Address address = addressService.saveAddress(restaurantDTO.getAddress());
-
+    	
         Restaurant restaurant = new Restaurant();
         restaurant.setMerchantId(restaurantDTO.getMerchantId());
         restaurant.setRestaurantName(restaurantDTO.getRestaurantName());
         restaurant.setContact(restaurantDTO.getContact());
-        restaurant.setAddressId(address.getAddressId());
+        restaurant.setAddressLine(restaurantDTO.getAddressLine());
+        restaurant.setCity(restaurantDTO.getCity());
+        restaurant.setState(restaurantDTO.getState());
+        restaurant.setCountry(restaurantDTO.getCountry());
+        restaurant.setPinCode(restaurantDTO.getPinCode());
         restaurant.setManagerName(restaurantDTO.getManagerName());
         restaurant.setRestaurant_image_Url(restaurantDTO.getRestaurant_image_Url());
         
         Restaurant savedRestaurant = restaurantRepository.save(restaurant);
 
         return getDTOFromRestaurant(savedRestaurant);
-
+     
     }
     
-    public MerchantRestaurantDTO getRestaurantByMerchantId(Integer merchantId) {
+    
+    
+    @Override
+    public RestaurantsInItemDTO getRestaurantByMerchantId(Integer merchantId) {
         Restaurant restaurant = restaurantRepository.findByMerchantId(merchantId);
         if (restaurant == null) {
             throw new RestaurantException("Restaurant not found for merchantId: " + merchantId);
         }
-        return convertToMerchantDTO(restaurant);
+        return getDTOFromRestaurant(restaurant);
     }
 
-    private MerchantRestaurantDTO convertToMerchantDTO(Restaurant restaurant) {
-        MerchantRestaurantDTO dto = new MerchantRestaurantDTO();
-        dto.setRestaurantId(restaurant.getRestaurantId());
-        dto.setMerchantId(restaurant.getMerchantId());
-        dto.setRestaurantName(restaurant.getRestaurantName());
-        dto.setAddress(validateAddress(restaurant.getAddressId()));
-        dto.setRestaurant_image_Url(restaurant.getRestaurant_image_Url());
-        dto.setManagerName(restaurant.getManagerName());
-        dto.setContact(restaurant.getContact());
-        return dto;
-    }
+//    private MerchantRestaurantDTO convertToMerchantDTO(Restaurant restaurant) {
+//    	
+//        MerchantRestaurantDTO dto = new MerchantRestaurantDTO();
+//        dto.setRestaurantId(restaurant.getRestaurantId());
+//        dto.setMerchantId(restaurant.getMerchantId());
+//        dto.setRestaurantName(restaurant.getRestaurantName());
+//        dto.setAddressLine(restaurant.getAddressLine());
+//        dto.setCity(restaurant.getCity());
+//        dto.setState(restaurant.getState());
+//        dto.setCountry(restaurant.getCountry());
+//        dto.setPinCode(restaurant.getPinCode());
+//        dto.setRestaurant_image_Url(restaurant.getRestaurant_image_Url());
+//        dto.setManagerName(restaurant.getManagerName());
+//        dto.setContact(restaurant.getContact());
+//        return dto;
+//    }
 
     @Override
-    public MerchantRestaurantDTO updateRestaurant(MerchantRestaurantDTO restaurantDTO) {
+    public RestaurantsInItemDTO updateRestaurant(RestaurantsInItemDTO restaurantDTO) {
 
         Restaurant savedRestaurant = validateRestaurant(restaurantDTO.getRestaurantId());
 
@@ -90,31 +98,16 @@ public class RestaurantServiceImpl implements RestaurantService{
         savedRestaurant.setContact(restaurantDTO.getContact());
         savedRestaurant.setManagerName(restaurantDTO.getManagerName());
         savedRestaurant.setRestaurant_image_Url(restaurantDTO.getRestaurant_image_Url());
+        savedRestaurant.setAddressLine(restaurantDTO.getAddressLine());
+        savedRestaurant.setCity(restaurantDTO.getCity());
+        savedRestaurant.setState(restaurantDTO.getState());
+        savedRestaurant.setCountry(restaurantDTO.getCountry());
+        savedRestaurant.setPinCode(restaurantDTO.getPinCode());
 
-        // Update address
-        if (restaurantDTO.getAddress() != null) {
-            Address updatedAddress = addressService.saveAddress(restaurantDTO.getAddress());
-            savedRestaurant.setAddressId(updatedAddress.getAddressId());
-        }
-
-        // Save the updated restaurant
         Restaurant updatedRestaurant = restaurantRepository.save(savedRestaurant);
 
         // Convert the updated restaurant back to DTO
-        return convertToMerchantDTO(updatedRestaurant);
-    }
-    private RestaurantDTO convertToDTO(Restaurant restaurant) {
-        // Implement conversion logic from Restaurant entity to RestaurantDTO
-  
-        RestaurantDTO restaurantDTO = new RestaurantDTO();
-        restaurantDTO.setRestaurantId(restaurant.getRestaurantId());
-        restaurantDTO.setRestaurantName(restaurant.getRestaurantName());
-        restaurantDTO.setAddress(validateAddress(restaurant.getAddressId()));
-        restaurantDTO.setManagerName(restaurant.getManagerName());
-        restaurantDTO.setContact(restaurant.getContact());
-        restaurantDTO.setRestaurant_image_Url(restaurant.getRestaurant_image_Url());
-        restaurantDTO.setMerchantId(restaurant.getMerchantId());
-        return restaurantDTO;
+        return getDTOFromRestaurant(updatedRestaurant);
     }
     
     
@@ -122,11 +115,9 @@ public class RestaurantServiceImpl implements RestaurantService{
     public Restaurant removeRestaurant(Integer restaurantId) {
 
         Restaurant savedRestaurant = validateRestaurant(restaurantId);
-        addressService.deleteAddress(savedRestaurant.getAddressId());
         restaurantRepository.delete(savedRestaurant);
 
         return savedRestaurant;
-
     }
 
     @Override
@@ -144,7 +135,7 @@ public class RestaurantServiceImpl implements RestaurantService{
         return restaurantDTO;
     	
     }
-
+    
     private RestaurantsInItemDTO getDTOFromRestaurant(Restaurant restaurant){
 
         RestaurantsInItemDTO savedRestaurantDTO = new RestaurantsInItemDTO();
@@ -153,19 +144,40 @@ public class RestaurantServiceImpl implements RestaurantService{
         savedRestaurantDTO.setMerchantId(restaurant.getMerchantId());
         savedRestaurantDTO.setRestaurantName(restaurant.getRestaurantName());
         savedRestaurantDTO.setContact(restaurant.getContact());
-        savedRestaurantDTO.setAddress(validateAddress(restaurant.getAddressId()));
+        savedRestaurantDTO.setAddressLine(restaurant.getAddressLine());
+        savedRestaurantDTO.setCity(restaurant.getCity());
+        savedRestaurantDTO.setState(restaurant.getState());
+        savedRestaurantDTO.setCountry(restaurant.getCountry());
+        savedRestaurantDTO.setPinCode(restaurant.getPinCode());
         savedRestaurantDTO.setManagerName(restaurant.getManagerName());
         savedRestaurantDTO.setRestaurant_image_Url(restaurant.getRestaurant_image_Url());
         return savedRestaurantDTO;
     }
-
-    private Address validateAddress(Integer addressId){
-
-        Address address = addressService.getAddress(addressId);
-        if(address==null) throw new AddressException("Invalid address id : "+addressId);
-        return address;
-
+    
+    private RestaurantDTO convertToDTO(Restaurant restaurant) {
+    	  
+        RestaurantDTO restaurantDTO = new RestaurantDTO();
+        restaurantDTO.setRestaurantId(restaurant.getRestaurantId());
+        restaurantDTO.setRestaurantName(restaurant.getRestaurantName());
+        restaurantDTO.setAddressLine(restaurant.getAddressLine());
+        restaurantDTO.setCity(restaurant.getCity());
+        restaurantDTO.setState(restaurant.getState());
+        restaurantDTO.setCountry(restaurant.getCountry());
+        restaurantDTO.setPinCode(restaurant.getPinCode());
+        restaurantDTO.setManagerName(restaurant.getManagerName());
+        restaurantDTO.setContact(restaurant.getContact());
+        restaurantDTO.setRestaurant_image_Url(restaurant.getRestaurant_image_Url());
+        restaurantDTO.setMerchantId(restaurant.getMerchantId());
+        return restaurantDTO;
     }
+    
+    
+	@Override
+	public List<RestaurantInfoDTO> getAllRestaurants() {
+	  return restaurantRepository.findAllRestaurants();
+	}
+
+
 
     private Restaurant validateRestaurant(Integer restaurantId){
 
@@ -173,10 +185,7 @@ public class RestaurantServiceImpl implements RestaurantService{
 
     }
 
-	@Override
-	public List<RestaurantInfoDTO> getAllRestaurants() {
-	  return restaurantRepository.findAllRestaurants();
-	}
+
 }
 
 

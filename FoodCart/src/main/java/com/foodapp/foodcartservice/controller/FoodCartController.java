@@ -2,6 +2,7 @@ package com.foodapp.foodcartservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.foodapp.foodcartservice.dto.FoodCartDTO;
@@ -9,6 +10,9 @@ import com.foodapp.foodcartservice.model.CartItem;
 import com.foodapp.foodcartservice.model.FoodCart;
 import com.foodapp.foodcartservice.service.FoodCartService;
 
+
+@Validated
+@CrossOrigin(origins="http://localhost:4200")
 @RestController
 @RequestMapping("/fooddelivery/foodcart")
 public class FoodCartController {

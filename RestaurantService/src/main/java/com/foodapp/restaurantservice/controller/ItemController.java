@@ -3,6 +3,7 @@ import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.foodapp.restaurantservice.dto.ItemsInRestaurantDTO;
@@ -12,6 +13,9 @@ import com.foodapp.restaurantservice.service.ItemService;
 
 import java.util.List;
 
+
+@Validated
+@CrossOrigin(origins="http://localhost:4200")
 @RestController
 @RequestMapping("/fooddelivery/items")
 public class ItemController {

@@ -17,6 +17,6 @@ public class RegistrationDTO {
     private String state;
     private String country;
     private Integer pinCode;
-	private Integer FoodcartId;
+    private Integer foodCartId;
 
 }

@@ -11,32 +11,32 @@ import jakarta.mail.MessagingException;
  
 @Service
 public class UserService {
-    @Autowired
-    private EmailUtil emailUtil;
+    private final EmailUtil emailUtil;
     private final UserRepo userRepo;
     private final BCryptPasswordEncoder passwordEncoder; // Adding BCryptPasswordEncoder
  
     @Autowired
-    public UserService(UserRepo userRepo, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepo userRepo, BCryptPasswordEncoder passwordEncoder,EmailUtil emailUtil) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
+        this.emailUtil = emailUtil;
     }
     public String forgotPassword(String email) {
         User user = userRepo.findByEmail(email);
         if (user == null) {
-            throw new RuntimeException("User not found with this email: " + email);
+            throw new IllegalArgumentException("User not found with this email: " + email);
         }
         try {
             emailUtil.sendSetPasswordEmail(email);
         } catch (MessagingException e) {
-            throw new RuntimeException("Unable to send set password Link. Please try again.");
+            throw new IllegalArgumentException("Unable to send set password Link. Please try again.");
         }
         return (email);
     }
     public String setPassword(String email, String newPassword) {
         User user = userRepo.findByEmail(email);
         if (user == null) {
-            throw new RuntimeException("User not found with this email: " + email);
+            throw new IllegalArgumentException("User not found with this email: " + email);
         }
         // Encrypt the password before saving
         String encryptedPassword = passwordEncoder.encode(newPassword);

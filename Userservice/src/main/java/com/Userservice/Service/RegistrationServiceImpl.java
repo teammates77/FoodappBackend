@@ -24,16 +24,17 @@ private final UserRepo userRepo;
 private final ModelMapper modelMapper;
 private final BCryptPasswordEncoder passwordEncoder;
 private final CartService cartService;
+private final EmailService email;
 
-@Autowired
-private EmailService email;
+
   
 	@Autowired
-	public RegistrationServiceImpl(UserRepo userRepo, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder,CartService cartService) {
+	public RegistrationServiceImpl(UserRepo userRepo, ModelMapper modelMapper, BCryptPasswordEncoder passwordEncoder,CartService cartService, EmailService email) {
 		this.userRepo = userRepo;
 		this.modelMapper = modelMapper;
 		this.passwordEncoder = passwordEncoder;
 		this.cartService = cartService;
+		this.email =email;
 }
 	
 	@Override
@@ -103,7 +104,7 @@ private EmailService email;
             userDetails.setState(user.getState());
             userDetails.setCountry(user.getCountry());
             userDetails.setPinCode(user.getPinCode());
-            userDetails.setFoodcartId(user.getFoodCartId());
+            userDetails.setFoodCartId(user.getFoodCartId());
 
             return userDetails;
         }else {
@@ -125,6 +126,7 @@ private EmailService email;
         registrationDTO.setState(user.getState());
         registrationDTO.setCountry(user.getCountry());
         registrationDTO.setPinCode(user.getPinCode());
+        registrationDTO.setFoodCartId(user.getFoodCartId());
 
         return registrationDTO;
 
@@ -145,6 +147,7 @@ private EmailService email;
             userDetails.setState(user.getState());
             userDetails.setCountry(user.getCountry());
             userDetails.setPinCode(user.getPinCode());
+            userDetails.setFoodCartId(user.getFoodCartId());
 	        
 	        return userDetails;
 	    }else {
@@ -166,6 +169,11 @@ private EmailService email;
 	    }
 	    return registrationDTOs;
 	}
+	@Override
+	public void deleteUserById(Integer userId) {
+	    userRepo.deleteById(userId);
+	}
+
 
 }
 

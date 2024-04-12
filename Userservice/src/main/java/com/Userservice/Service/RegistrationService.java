@@ -30,6 +30,9 @@ public interface RegistrationService {
 	Optional<User> getUserById(Integer userId);
 
 	RegistrationDTO getUserDetailsById(Integer userId);
+	
+	void deleteUserById(Integer userId);
+
 
 
 }

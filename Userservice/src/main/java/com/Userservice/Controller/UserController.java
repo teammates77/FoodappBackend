@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,7 +93,7 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
             responseDTO.setState(userDetails.getState());
             responseDTO.setCountry(userDetails.getCountry());
             responseDTO.setPinCode(userDetails.getPinCode());
-            responseDTO.setFoodCartId(userDetails.getFoodcartId());
+            responseDTO.setFoodCartId(userDetails.getFoodCartId());
  
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         } else {
@@ -133,8 +134,8 @@ public ResponseEntity<?> updateProfile(@PathVariable Integer userId, @Valid @Req
         existingUser.setState(responseDTO.getState());
         existingUser.setCountry(responseDTO.getCountry());
         existingUser.setPinCode(responseDTO.getPinCode());
-        // Save the updated user
-        //User updatedUser = registrationService.updateUser(existingUser);
+     // Update user in the database
+        registrationService.updateUser(existingUser);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     } catch (Exception e) {
         return new ResponseEntity<>("Failed to update profile: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -145,6 +146,7 @@ public ResponseEntity<?> updateProfile(@PathVariable Integer userId, @Valid @Req
 public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
     return new ResponseEntity<>(userService.forgotPassword(request.getEmail()), HttpStatus.OK);
 }
+
 @PutMapping("/set-password")
 public ResponseEntity<String> setPassword(@RequestBody SetPasswordRequest request) {
     String email = request.getEmail();
@@ -163,9 +165,12 @@ public ResponseEntity<User> findByEmail(@PathVariable String email) {
     User user = userService.findByEmail(email);
     return ResponseEntity.ok(user);
 }
+@DeleteMapping("/{userId}")
+public ResponseEntity<String> deleteUserById(@PathVariable Integer userId) {
+    registrationService.deleteUserById(userId);
+    return ResponseEntity.ok("User deleted successfully");
 }
-
-
+}
 
 
 	

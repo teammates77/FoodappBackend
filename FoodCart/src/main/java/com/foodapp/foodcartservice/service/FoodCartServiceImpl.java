@@ -4,8 +4,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.foodapp.foodcartservice.dto.CartResponseDTO;
 import com.foodapp.foodcartservice.dto.FoodCartDTO;
 import com.foodapp.foodcartservice.dto.ItemDTO;
+import com.foodapp.foodcartservice.dto.ItemInCartDTO;
 import com.foodapp.foodcartservice.exceptions.CartException;
 import com.foodapp.foodcartservice.exceptions.ItemException;
 import com.foodapp.foodcartservice.exceptions.RestaurantException;
@@ -17,6 +19,7 @@ import com.foodapp.foodcartservice.repository.ItemRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,17 +27,17 @@ public class FoodCartServiceImpl implements FoodCartService{
 
 	 private final FoodCartRepository foodCartRepository;
 	    private final ItemRepository itemRepository;
-	    private final ItemService itemService;
+	    private final CartItemService cartItemService;
 	    private final RestaurantService restaurantService;
 
 	    @Autowired
 	    public FoodCartServiceImpl(FoodCartRepository foodCartRepository,
 	                               ItemRepository itemRepository,
-	                               ItemService itemService,
+	                               CartItemService cartItemService,
 	                               RestaurantService restaurantService) {
 	        this.foodCartRepository = foodCartRepository;
 	        this.itemRepository = itemRepository;
-	        this.itemService = itemService;
+	        this.cartItemService = cartItemService;
 	        this.restaurantService = restaurantService;
 	    }
 
@@ -94,13 +97,30 @@ public class FoodCartServiceImpl implements FoodCartService{
 
     }
 
+//    @Override
+//    public FoodCart getCartOfUser(Integer userId) {
+//
+//        return foodCartRepository.findByUserId(userId).orElseThrow(()-> new CartException("Invalid user id : "+userId));
+//
+//    }
+
     @Override
-    public FoodCart getCartOfUser(Integer userId) {
+    public CartResponseDTO getCartOfUser(Integer userId) {
+        FoodCart foodCart = foodCartRepository.findByUserId(userId)
+                .orElseThrow(() -> new CartException("Invalid user id: " + userId));
 
-        return foodCartRepository.findByUserId(userId).orElseThrow(()-> new CartException("Invalid user id : "+userId));
+        List<ItemInCartDTO> itemsInCart = foodCart.getItems().stream()
+                .map(item -> new ItemInCartDTO(item.getCartItemId(), item.getItemId(), item.getItemName(), item.getQuantity(), item.getCost()))
+                .collect(Collectors.toList());
 
+        Double totalCost = foodCart.getItems().stream()
+                .mapToDouble(CartItem::getCost)
+                .sum();
+
+        return new CartResponseDTO(userId, itemsInCart, totalCost);
     }
 
+    
     @Override
     public FoodCart addItemToCart(Integer cartId, Integer itemId, Integer restaurantId) {
 
@@ -130,7 +150,7 @@ public class FoodCartServiceImpl implements FoodCartService{
 
         itemDTO.setQuantity(1);
 
-        CartItem savedItem = itemService.addItem(itemDTO);
+        CartItem savedItem = cartItemService.addItem(itemDTO);
 
         foodCart.getItems().add(savedItem);
 
@@ -138,30 +158,35 @@ public class FoodCartServiceImpl implements FoodCartService{
 
     }
 
+    
     @Override
     public FoodCart increaseOrReduceQuantityOfItem(Integer cartId, Integer itemId, Integer quantity) {
-
         FoodCart foodCart = validateCart(cartId);
-
         List<CartItem> items = foodCart.getItems();
-
-        Optional<CartItem> itemOpt = items.stream().filter(el-> el.getItemId().equals(itemId)).findAny();
-
-        if(!itemOpt.isPresent()) throw new ItemException("item does not exists with item id : "+itemId);
-
+ 
+        Optional<CartItem> itemOpt = items.stream().filter(el -> el.getItemId().equals(itemId)).findAny();
+ 
+        if (!itemOpt.isPresent()) throw new ItemException("Item does not exist with item id: " + itemId);
+ 
         CartItem savedItem = itemOpt.get();
-
-        savedItem.setQuantity(quantity+ savedItem.getQuantity());
+        int oldQuantity = savedItem.getQuantity();
+        int newQuantity = quantity + oldQuantity;
+        double cost=savedItem.getCost();
+        double itemPrice=cost/oldQuantity;
+        
+        savedItem.setQuantity(newQuantity);
+        savedItem.setCost(itemPrice * newQuantity);
 
         itemRepository.save(savedItem);
-
+        foodCartRepository.save(foodCart);
+ 
         return foodCart;
     }
 
     @Override
     public CartItem removeItemFromCart(Integer cartItemId) {
 
-    	CartItem itemToRemove = itemService.validateItem(cartItemId);
+    	CartItem itemToRemove = cartItemService.validateItem(cartItemId);
 
         itemRepository.delete(itemToRemove);
 

@@ -66,27 +66,10 @@ public class RestaurantServiceImpl implements RestaurantService{
     public RestaurantsInItemDTO getRestaurantByMerchantId(Integer merchantId) {
         Restaurant restaurant = restaurantRepository.findByMerchantId(merchantId);
         if (restaurant == null) {
-            throw new RestaurantException("Restaurant not found for merchantId: " + merchantId);
+            return null;
         }
         return getDTOFromRestaurant(restaurant);
     }
-
-//    private MerchantRestaurantDTO convertToMerchantDTO(Restaurant restaurant) {
-//    	
-//        MerchantRestaurantDTO dto = new MerchantRestaurantDTO();
-//        dto.setRestaurantId(restaurant.getRestaurantId());
-//        dto.setMerchantId(restaurant.getMerchantId());
-//        dto.setRestaurantName(restaurant.getRestaurantName());
-//        dto.setAddressLine(restaurant.getAddressLine());
-//        dto.setCity(restaurant.getCity());
-//        dto.setState(restaurant.getState());
-//        dto.setCountry(restaurant.getCountry());
-//        dto.setPinCode(restaurant.getPinCode());
-//        dto.setRestaurant_image_Url(restaurant.getRestaurant_image_Url());
-//        dto.setManagerName(restaurant.getManagerName());
-//        dto.setContact(restaurant.getContact());
-//        return dto;
-//    }
 
     @Override
     public RestaurantsInItemDTO updateRestaurant(RestaurantsInItemDTO restaurantDTO) {

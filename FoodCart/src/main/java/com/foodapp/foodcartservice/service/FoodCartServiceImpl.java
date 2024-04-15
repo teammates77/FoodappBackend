@@ -110,7 +110,8 @@ public class FoodCartServiceImpl implements FoodCartService{
                 .orElseThrow(() -> new CartException("Invalid user id: " + userId));
 
         List<ItemInCartDTO> itemsInCart = foodCart.getItems().stream()
-                .map(item -> new ItemInCartDTO(item.getCartItemId(), item.getItemId(), item.getItemName(), item.getQuantity(), item.getCost()))
+                .map(item -> new ItemInCartDTO(item.getCartItemId(), item.getItemId(), 
+                		item.getItemName(), item.getQuantity(), item.getCost()))
                 .collect(Collectors.toList());
 
         Double totalCost = foodCart.getItems().stream()

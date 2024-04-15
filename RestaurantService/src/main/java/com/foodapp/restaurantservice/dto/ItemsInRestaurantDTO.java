@@ -28,6 +28,9 @@ public class ItemsInRestaurantDTO {
     
     private String description;
     
+    private Integer restaurantId;
+
+    
    // private RestaurantInfoDTO restaurant;
     //private Restaurant restaurant;
 

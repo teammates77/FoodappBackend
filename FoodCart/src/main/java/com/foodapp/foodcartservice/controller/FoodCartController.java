@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import com.foodapp.foodcartservice.dto.CartResponseDTO;
 import com.foodapp.foodcartservice.dto.FoodCartDTO;
 import com.foodapp.foodcartservice.model.CartItem;
 import com.foodapp.foodcartservice.model.FoodCart;
@@ -63,13 +64,14 @@ public class FoodCartController {
     }
     @GetMapping("cartbyuser/{userId}")
 
-    public ResponseEntity<FoodCart> viewCartOfUser(@PathVariable Integer userId){
+    public ResponseEntity<CartResponseDTO> viewCartOfUser(@PathVariable Integer userId){
 
-        FoodCart savedCart = foodCartService.getCartOfUser(userId);
+        CartResponseDTO savedCart = foodCartService.getCartOfUser(userId);
 
         return new ResponseEntity<>(savedCart,HttpStatus.OK);
 
     }
+    
     @PatchMapping("/{cartId}/{itemId}/{quantity}")
 
     public ResponseEntity<FoodCart> increaseOrReduceQuantityOfItem(@PathVariable Integer cartId, @PathVariable Integer itemId, @PathVariable Integer quantity){
@@ -101,3 +103,8 @@ public class FoodCartController {
     }
 
 }
+
+
+
+
+

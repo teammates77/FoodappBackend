@@ -1,5 +1,6 @@
 package com.foodapp.foodcartservice.service;
 
+import com.foodapp.foodcartservice.dto.CartResponseDTO;
 import com.foodapp.foodcartservice.dto.FoodCartDTO;
 import com.foodapp.foodcartservice.model.CartItem;
 import com.foodapp.foodcartservice.model.FoodCart;
@@ -12,7 +13,8 @@ public interface FoodCartService {
     public FoodCartDTO viewCart(Integer cartId);
 
     public FoodCartDTO removeCart(Integer cartId);
-    public FoodCart getCartOfUser(Integer userId);
+    
+    public CartResponseDTO getCartOfUser(Integer userId);
 
     public FoodCart addItemToCart(Integer cartId, Integer itemId,Integer restaurantId);
 

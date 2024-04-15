@@ -75,15 +75,19 @@ public class ItemServiceImpl implements ItemService{
     }
 
     @Override
-    public List<Item> viewItemsByCategory(Integer categoryId) {
+    public List<ItemsInRestaurantDTO> viewItemsByCategory(Integer categoryId) {
 
         Category category = categoryService.getCategoryById(categoryId);
 
        if(category==null)  throw new RuntimeException("Category does not exists with name :"+categoryId);
 
-       return itemRepository.findByCategoryId(categoryId);
+       List<Item> items = itemRepository.findByCategoryId(categoryId);
+       List<ItemsInRestaurantDTO> itemDTOs = new ArrayList<>();
+       for (Item item : items) {
+           itemDTOs.add(getDtoFromItemexceptrestAddress(item));
+       }
 
-
+       return itemDTOs;
     }
 
     @Override
@@ -148,6 +152,7 @@ public class ItemServiceImpl implements ItemService{
         itemDTO.setDescription(item.getDescription());
         Category category = validateCategory(item.getCategoryId());
         itemDTO.setCategory(category);
+        itemDTO.setRestaurantId(item.getRestaurant().getRestaurantId());
         
         //itemDTO.setRestaurant(item.getRestaurant());
 

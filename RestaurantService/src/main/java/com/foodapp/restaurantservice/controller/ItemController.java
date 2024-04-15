@@ -65,9 +65,9 @@ public class ItemController {
     }
 
     @GetMapping("/itembycategory/{categoryId}")
-    public ResponseEntity<List<Item>> viewItemByCategoryName(@PathVariable Integer categoryId){
+    public ResponseEntity<List<ItemsInRestaurantDTO>> viewItemByCategoryName(@PathVariable Integer categoryId){
 
-        List<Item> items = itemService.viewItemsByCategory(categoryId);
+        List<ItemsInRestaurantDTO> items = itemService.viewItemsByCategory(categoryId);
 
         return new ResponseEntity<>(items,HttpStatus.OK);
 

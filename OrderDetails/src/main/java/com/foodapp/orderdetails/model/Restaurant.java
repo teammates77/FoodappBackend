@@ -17,7 +17,15 @@ public class Restaurant {
 
     private String restaurantName;
 
-    private Address address;
+    private String addressLine;
+
+    private String city;
+
+    private String state;
+
+    private String country;
+
+    private Integer pinCode;
 
 //    private List<Item> items = new ArrayList<>();
 

@@ -28,8 +28,9 @@ public class Restaurant {
 
     private String managerName;
     
-    private String restaurant_image_Url;
-
+   private String restaurant_image_Url;
+    
+    
     private String contact;
     
     private String addressLine;
@@ -47,6 +48,8 @@ public class Restaurant {
 //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)  
     private List<Item> items = new ArrayList<>();
+
+
 
 }
 

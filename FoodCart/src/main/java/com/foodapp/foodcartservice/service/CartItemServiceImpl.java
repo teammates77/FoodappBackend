@@ -9,13 +9,13 @@ import com.foodapp.foodcartservice.model.CartItem;
 import com.foodapp.foodcartservice.repository.ItemRepository;
 
 @Service
-public class ItemServiceImpl implements ItemService{
+public class CartItemServiceImpl implements CartItemService{
 
     
     private final ItemRepository itemRepository;
     
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository) {
+    public CartItemServiceImpl(ItemRepository itemRepository) {
     	this.itemRepository=itemRepository;
     }
     

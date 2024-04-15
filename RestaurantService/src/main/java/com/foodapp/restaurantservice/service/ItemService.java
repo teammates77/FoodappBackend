@@ -15,7 +15,7 @@ public interface ItemService {
 
     public boolean removeItem(Integer itemId);
 
-    public List<Item> viewItemsByCategory(Integer categoryId);
+    public List<ItemsInRestaurantDTO> viewItemsByCategory(Integer categoryId);
     
     public Item addItemToRestaurant(Item item,Integer restaurantId);
     

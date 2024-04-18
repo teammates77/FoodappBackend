@@ -7,8 +7,10 @@ import com.foodapp.orderdetails.dto.AddOrderDetailsDTO;
 import com.foodapp.orderdetails.dto.ItemsInRestaurantOrderDTO;
 import com.foodapp.orderdetails.dto.OrderDetailsDTO;
 import com.foodapp.orderdetails.dto.OrderItemDTO;
+import com.foodapp.orderdetails.dto.UserOrdersDTO;
 import com.foodapp.orderdetails.exceptions.CartException;
 import com.foodapp.orderdetails.exceptions.OrderException;
+import com.foodapp.orderdetails.model.Address;
 import com.foodapp.orderdetails.model.FoodCart;
 import com.foodapp.orderdetails.model.Item;
 import com.foodapp.orderdetails.model.OrderDetails;
@@ -33,13 +35,16 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	private final OrderDetailsRepository orderDetailsRepository;
 	private final CartService cartService;
 	private final OrderItemRepository orderItemRepository;
+	
+	private final AddressService addressService;
 
 	@Autowired
 	public OrderDetailsServiceImpl(OrderDetailsRepository orderDetailsRepository, CartService cartService,
-			OrderItemRepository orderItemRepository) {
+			OrderItemRepository orderItemRepository,AddressService addressService) {
 		this.orderDetailsRepository = orderDetailsRepository;
 		this.cartService = cartService;
 		this.orderItemRepository = orderItemRepository;
+		this.addressService= addressService;
 	}
 
 	/*------- written by  -----------*/
@@ -74,25 +79,31 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		return getDTOFromOrder(orderDetails);
 
 	}
+	
+	
+	    @Override
+		public List<UserOrdersDTO> viewOrderOfCustomer(Integer userid) {
+	 
+			List<OrderItem> orderedItems = orderItemRepository.findByUserId(userid);
+	 
+			// Convert the list of ordered items to DTOs
+			List<UserOrdersDTO> itemsInUserOrderDTOList = new ArrayList<>();
+			for (OrderItem orderItem : orderedItems) {
+				UserOrdersDTO dto = new UserOrdersDTO();
+				dto.setItemId(orderItem.getItemId());
+				dto.setItemName(orderItem.getItemName());
+				dto.setQuantity(orderItem.getQuantity());
+				dto.setCost(orderItem.getCost());
+				dto.setUserid(orderItem.getUserId());
+				dto.setStatus(orderItem.getOrderDetails().getStatus());
+				itemsInUserOrderDTOList.add(dto);
+			}
+	 
+			return itemsInUserOrderDTOList;
+			
+	 
+		}
 
-	/*------- written by    -----------*/
-	@Override
-	public List<OrderDetailsDTO> viewOrderOfCustomer(Integer cartId) {
-
-		List<OrderDetails> orderDetails = orderDetailsRepository.findByCartId(cartId);
-
-		if (orderDetails.isEmpty())
-			throw new OrderException("No orders found");
-
-		List<OrderDetailsDTO> orderDetailsDTOS = new ArrayList<>();
-
-		orderDetails.stream().forEach(el -> orderDetailsDTOS.add(getDTOFromOrder(el)));
-
-		return orderDetailsDTOS;
-
-	}
-
-	/*------- written by  JeevanReddy-----------*/
 	private FoodCart validateCart(Integer cartId) {
 
 		FoodCart foodCart = cartService.getCart(cartId);
@@ -104,7 +115,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 
 	}
 
-	/*------- written by  JeevanReddy-----------*/
+
 	private OrderDetails validateOrderDetails(Integer orderId) {
 
 		return orderDetailsRepository.findById(orderId)
@@ -113,7 +124,6 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	}
 	
 
-	/*------- written by  JeevanReddy-----------*/
 
 	private OrderDetailsDTO getDTOFromOrder(OrderDetails orderDetails) {
 
@@ -133,48 +143,18 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 
 	}
 
-	/*------------Written by JeevanReddy---------------*/
-//  @Override
-//  public OrderDetails addOrder(Integer cartId) {
-//
-//      validateCart(cartId);
-//
-//      OrderDetails orderDetails = new OrderDetails();
-//
-//      orderDetails.setCartId(cartId);
-//
-//      orderDetails.setStatus("Pending");
-//
-//      orderDetails.setTimeSpan(LocalDateTime.now());
-//      
-//      FoodCart foodCart = cartService.getCart(cartId);
-//      for (Item foodItem : foodCart.getItems()) {
-//          OrderItem orderItem = new OrderItem();
-//          orderItem.setItemId(foodItem.getItemId());
-//          orderItem.setItemName(foodItem.getItemName());
-//          orderItem.setQuantity(foodItem.getQuantity());
-//          orderItem.setCost(foodItem.getCost());
-//          orderItem.setRestaurantId(foodItem.getRestaurantId());
-//          orderItem.setUserId(foodCart.getUserId());
-//          //orderItem.setOrderDetails(orderDetails);
-//          
-//          orderDetails.getItems().add(orderItem);
-//      }
-//
-//      return orderDetailsRepository.save(orderDetails);
-//
-//  }
 
-	/*------- written by  JeevanReddy-----------*/
 	@Override
-	public AddOrderDetailsDTO addOrder(Integer cartId) {
+	public AddOrderDetailsDTO addOrder(Integer cartId, Integer addressId) {
 		validateCart(cartId);
-
+		
+		Address address = addressService.getAddress(addressId);
 		OrderDetails orderDetails = new OrderDetails();
 		orderDetails.setCartId(cartId);
 		orderDetails.setStatus("Pending");
 		orderDetails.setTimeSpan(LocalDateTime.now());
-
+		orderDetails.setAddressId(addressId);
+ 
 		FoodCart foodCart = cartService.getCart(cartId);
 		for (Item foodItem : foodCart.getItems()) {
 			OrderItem orderItem = new OrderItem();
@@ -185,10 +165,10 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 			orderItem.setRestaurantId(foodItem.getRestaurantId());
 			orderItem.setUserId(foodCart.getUserId());
 			orderItem.setOrderDetails(orderDetails);
-
+ 
 			orderDetails.getItems().add(orderItem);
 		}
-
+ 
 		orderDetails = orderDetailsRepository.save(orderDetails);
 		return convertToDTO(orderDetails);
 	}
@@ -198,6 +178,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		dto.setTimeSpan(orderDetails.getTimeSpan());
 		dto.setCartId(orderDetails.getCartId());
 		dto.setStatus(orderDetails.getStatus());
+		dto.setAddressId(orderDetails.getAddressId());
 		dto.setItems(orderDetails.getItems().stream().map(this::convertToDTO).collect(Collectors.toList()));
 		return dto;
 	}
@@ -213,7 +194,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		return dto;
 	}
 
-	/*------- written by  JeevanReddy-----------*/
+
 	@Override
 	public List<ItemsInRestaurantOrderDTO> viewOrderOfRestaurant(Integer restaurantId) {
 
@@ -228,6 +209,9 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 			dto.setQuantity(orderItem.getQuantity());
 			dto.setCost(orderItem.getCost());
 			dto.setRestaurantId(orderItem.getRestaurantId());
+		     Integer addressId = orderItem.getOrderDetails().getAddressId();
+		     Address address = addressService.getAddress(addressId);   
+		     dto.setAddress(address);
 
 			itemsInRestaurantOrderDTOList.add(dto);
 		}

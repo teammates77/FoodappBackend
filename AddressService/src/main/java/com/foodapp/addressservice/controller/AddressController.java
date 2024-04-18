@@ -12,7 +12,7 @@ import com.foodapp.addressservice.service.AddressService;
 
 
 @Validated
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins="http://localhost:4200")
 @RestController
 @RequestMapping("/fooddelivery/address")
 public class AddressController {

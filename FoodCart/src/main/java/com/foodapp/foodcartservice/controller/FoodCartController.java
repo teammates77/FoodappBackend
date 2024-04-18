@@ -13,7 +13,7 @@ import com.foodapp.foodcartservice.service.FoodCartService;
 
 
 @Validated
-@CrossOrigin(origins="*")
+@CrossOrigin(origins="http://localhost:4200")
 @RestController
 @RequestMapping("/fooddelivery/foodcart")
 public class FoodCartController {

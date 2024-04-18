@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 @Validated
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins="http://localhost:4200")
 @RestController
 @RequestMapping("/fooddelivery/bill")
 public class BillController {

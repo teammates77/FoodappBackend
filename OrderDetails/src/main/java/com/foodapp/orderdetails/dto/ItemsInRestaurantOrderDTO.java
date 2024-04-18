@@ -1,5 +1,8 @@
 package com.foodapp.orderdetails.dto;
 
+import com.foodapp.orderdetails.model.Address;
+
+import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +23,9 @@ public class ItemsInRestaurantOrderDTO{
     private Double cost;
     
     private Integer restaurantId;
+    @Embedded
+    private Address address;
+ 
+		
+	}
 
-}

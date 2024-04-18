@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Validated
-@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/fooddelivery/category")
 public class CategoryController {

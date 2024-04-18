@@ -24,5 +24,7 @@ public class OrderDetailsDTO {
 
     private String status;
     
+//    private Integer addressId;
+    
   //  private List<OrderItemDTO> items;
 }

@@ -17,4 +17,5 @@ public class AddOrderDetailsDTO {
 	    private Integer cartId;
 	    private String status;
 	    private List<OrderItemDTO> items;
+	    private Integer addressId;
 }

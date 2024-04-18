@@ -25,6 +25,14 @@ spring:
           uri: http://localhost:8083
           predicates:
             - Path=/fooddelivery/orderdetails/**
+        - id: MERCHANT-SERVICE
+          uri: http://localhost:8088
+          predicates:
+            - Path=/fooddelivery/merchant/**
+        - id: USER-SERVICE
+          uri: http://localhost:8080
+          predicates:
+            - Path=/fooddelivery/user/**
 server:
  port: 9191
 eureka:

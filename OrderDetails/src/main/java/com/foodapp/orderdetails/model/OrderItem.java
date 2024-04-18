@@ -21,7 +21,7 @@ import lombok.Setter;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer orderItemId;
 
     private Integer itemId;
 

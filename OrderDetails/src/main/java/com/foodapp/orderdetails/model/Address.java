@@ -30,8 +30,8 @@ public class Address {
 
     private Integer pinCode;
 
-    private List<Restaurant> restaurants = new ArrayList<>();
-
-    private User user;
+//    private List<Restaurant> restaurants = new ArrayList<>();
+//
+//    private User user;
 
 }

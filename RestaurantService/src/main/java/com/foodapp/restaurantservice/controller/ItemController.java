@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.foodapp.restaurantservice.dto.ItemsInRestaurantDTO;
-import com.foodapp.restaurantservice.dto.UpdateItemDTO;
+import com.foodapp.restaurantservice.dto.UpdateItemRequestDTO;
 import com.foodapp.restaurantservice.model.Item;
 import com.foodapp.restaurantservice.service.ItemService;
 
@@ -38,12 +38,11 @@ public class ItemController {
     }
 
     
+    
     @PutMapping("/update")
-    public ResponseEntity<UpdateItemDTO> updateItem(@RequestBody Item item){
-    	UpdateItemDTO updatedItem = itemService.updateItem(item);
-
-        return new ResponseEntity<>(updatedItem,HttpStatus.ACCEPTED);
-
+    public ResponseEntity<UpdateItemRequestDTO> updateItem(@RequestBody UpdateItemRequestDTO requestDTO) {
+        UpdateItemRequestDTO updatedItem = itemService.updateItem(requestDTO);
+        return new ResponseEntity<>(updatedItem, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{itemId}")

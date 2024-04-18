@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.foodapp.orderdetails.dto.AddOrderDetailsDTO;
 import com.foodapp.orderdetails.dto.ItemsInRestaurantOrderDTO;
 import com.foodapp.orderdetails.dto.OrderDetailsDTO;
+import com.foodapp.orderdetails.dto.UserOrdersDTO;
 import com.foodapp.orderdetails.model.OrderDetails;
 import com.foodapp.orderdetails.model.OrderItem;
 import com.foodapp.orderdetails.service.OrderDetailsService;
 
-
+@Validated
+@CrossOrigin(origins="http://localhost:4200")
 @RestController
 @RequestMapping("/fooddelivery/orderdetails")
 public class OrderDetailsController {
@@ -35,19 +39,22 @@ public class OrderDetailsController {
     	this.orderDetailsService=orderDetailsService;
     	}
 
-    					/*------- written by  JeevanReddy-----------*/
-    @PostMapping("/{cartId}")
-  
-    public ResponseEntity<AddOrderDetailsDTO> addOrder( @PathVariable Integer cartId){
-
-        AddOrderDetailsDTO savedOrder = orderDetailsService.addOrder(cartId);
-
-        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
-
-    }
+//    @PostMapping("/{cartId}")
+//  
+//    public ResponseEntity<AddOrderDetailsDTO> addOrder( @PathVariable Integer cartId){
+//
+//        AddOrderDetailsDTO savedOrder = orderDetailsService.addOrder(cartId);
+//
+//        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
+//
+//    }
+//    
     
-
-						/*------- written by  JeevanReddy-----------*/
+    @PostMapping("/{cartId}/{addressId}")
+    public ResponseEntity<AddOrderDetailsDTO> addOrder(@PathVariable Integer cartId, @PathVariable Integer addressId) {
+        AddOrderDetailsDTO savedOrder = orderDetailsService.addOrder(cartId, addressId);
+        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
+    }
 
     @GetMapping("/{orderId}")
     
@@ -59,7 +66,7 @@ public class OrderDetailsController {
 
     }
     
-    /*------- written by  -----------*/
+ 
     @DeleteMapping("/{orderId}")
     
     public ResponseEntity<String> removeOrder(@PathVariable Integer orderId){
@@ -72,8 +79,7 @@ public class OrderDetailsController {
 
     }
     
-    /*------- written by  -----------*/
-    
+ 
     @PutMapping
     public ResponseEntity<OrderDetails> updateOrder(@RequestBody OrderDetails orderDetails){
 
@@ -83,19 +89,28 @@ public class OrderDetailsController {
 
     }
     
+    @GetMapping("/ordersofacustomer/{userid}")
     
-    /*------- written by  -----------*/
-    @GetMapping("/ordersofacustomer/{cartId}")
-
-    public ResponseEntity<List<OrderDetailsDTO>> viewOrderOfCustomer(@PathVariable Integer cartId){
-
-        List<OrderDetailsDTO> orderDetailsDTO = orderDetailsService.viewOrderOfCustomer(cartId);
-
-        return new ResponseEntity<>(orderDetailsDTO,HttpStatus.OK);
+    public ResponseEntity<List<UserOrdersDTO>> viewOrderOfCustomer(@PathVariable Integer userid){
+ 
+        List<UserOrdersDTO> userOrdersDTO = orderDetailsService.viewOrderOfCustomer(userid);
+ 
+        return new ResponseEntity<>(userOrdersDTO,HttpStatus.OK);
     }
     
     
-    			/*------- written by  JeevanReddy-----------*/
+//    /*------- written by  -----------*/
+//    @GetMapping("/ordersofacustomer/{cartId}")
+//
+//    public ResponseEntity<List<OrderDetailsDTO>> viewOrderOfCustomer(@PathVariable Integer cartId){
+//
+//        List<OrderDetailsDTO> orderDetailsDTO = orderDetailsService.viewOrderOfCustomer(cartId);
+//
+//        return new ResponseEntity<>(orderDetailsDTO,HttpStatus.OK);
+//    }
+//    
+    
+    
     
     @GetMapping("/ordersofarestaurant/{restaurantId}")
     public ResponseEntity<List<ItemsInRestaurantOrderDTO>> viewOrderOfRestaurant(@PathVariable Integer restaurantId) {

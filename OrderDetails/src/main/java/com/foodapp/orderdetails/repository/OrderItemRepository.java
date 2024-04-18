@@ -8,5 +8,6 @@ import com.foodapp.orderdetails.model.OrderItem;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
     List<OrderItem> findByRestaurantId(Integer restaurantId);
+	public List<OrderItem> findByUserId(Integer userId);
 
 }

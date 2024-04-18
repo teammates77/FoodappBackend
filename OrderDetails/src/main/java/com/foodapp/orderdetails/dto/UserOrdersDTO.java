@@ -1,8 +1,5 @@
 package com.foodapp.orderdetails.dto;
 
-import com.foodapp.orderdetails.model.Address;
-
-import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,22 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ItemsInRestaurantOrderDTO{
 
+@AllArgsConstructor
+public class UserOrdersDTO {
     private Integer itemId;
-
     private String itemName;
-
     private Integer quantity;
-
     private Double cost;
-    
-    private Integer restaurantId;
-    @Embedded
-    private Address address;
- 
-		
-	}
-
+    private String status;
+    private Integer userid;
+}

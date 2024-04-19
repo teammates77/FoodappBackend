@@ -1,5 +1,7 @@
 package com.foodapp.addressservice.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,4 +53,10 @@ public class AddressServiceImpl implements AddressService{
         return address;
 
     }
+    
+    public List<Address> getAddressesByUserId(Integer userId) {
+        return addressRepository.findByUserId(userId);
+    }
+
+    
 }

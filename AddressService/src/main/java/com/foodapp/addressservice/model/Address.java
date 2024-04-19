@@ -34,6 +34,8 @@ public class Address {
     private String country;
 
     private Integer pinCode;
+    
+    private Integer userId;
 
 
 }

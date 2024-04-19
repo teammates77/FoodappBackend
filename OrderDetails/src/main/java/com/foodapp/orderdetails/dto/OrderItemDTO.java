@@ -10,4 +10,5 @@ public class OrderItemDTO {
     private Double cost;
     private Integer userId;
     private Integer restaurantId;
+    private String deliveryStatus;
 }

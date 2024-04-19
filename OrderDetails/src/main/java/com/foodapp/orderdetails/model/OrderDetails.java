@@ -38,7 +38,9 @@ public class OrderDetails {
     private String status;
     
     private Integer addressId;
-
+    
+    private String paymentId;
+    
     @OneToMany(mappedBy = "orderDetails", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 

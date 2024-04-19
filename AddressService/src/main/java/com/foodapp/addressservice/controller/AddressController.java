@@ -1,6 +1,8 @@
 package com.foodapp.addressservice.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +57,11 @@ public class AddressController {
 
         return new ResponseEntity<>(address, HttpStatus.OK);
 
+    }
+    @GetMapping("/addresses/{userId}")
+    public ResponseEntity<List<Address>> getAddressesByUserId(@PathVariable Integer userId) {
+        List<Address> addresses = addressService.getAddressesByUserId(userId);
+        return new ResponseEntity<>(addresses, HttpStatus.OK);
     }
 
 }

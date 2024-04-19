@@ -34,9 +34,12 @@ public class OrderItem {
     private Integer userId;
     
     private Integer restaurantId;
+    
+    private String deliveryStatus;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     @JsonIgnoreProperties("OrderItem")
     private OrderDetails orderDetails;
+
 }

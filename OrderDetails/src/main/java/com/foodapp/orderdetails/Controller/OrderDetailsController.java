@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.foodapp.orderdetails.dto.AddOrderDetailsDTO;
 import com.foodapp.orderdetails.dto.ItemsInRestaurantOrderDTO;
 import com.foodapp.orderdetails.dto.OrderDetailsDTO;
+import com.foodapp.orderdetails.dto.OrderItemDTO;
 import com.foodapp.orderdetails.dto.UserOrdersDTO;
 import com.foodapp.orderdetails.model.OrderDetails;
 import com.foodapp.orderdetails.model.OrderItem;
@@ -39,29 +40,17 @@ public class OrderDetailsController {
     	this.orderDetailsService=orderDetailsService;
     	}
 
-//    @PostMapping("/{cartId}")
-//  
-//    public ResponseEntity<AddOrderDetailsDTO> addOrder( @PathVariable Integer cartId){
-//
-//        AddOrderDetailsDTO savedOrder = orderDetailsService.addOrder(cartId);
-//
-//        return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
-//
-//    }
-//    
-    
-    @PostMapping("/{cartId}/{addressId}")
-    public ResponseEntity<AddOrderDetailsDTO> addOrder(@PathVariable Integer cartId, @PathVariable Integer addressId) {
-        AddOrderDetailsDTO savedOrder = orderDetailsService.addOrder(cartId, addressId);
+
+    @PostMapping("/{cartId}/{addressId}/{paymentId}")
+    public ResponseEntity<AddOrderDetailsDTO> addOrder(@PathVariable Integer cartId, @PathVariable Integer addressId,  @PathVariable String paymentId) {
+        AddOrderDetailsDTO savedOrder = orderDetailsService.addOrder(cartId, addressId,paymentId);
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{orderId}")
-    
+    @GetMapping("/{orderId}")  
     public ResponseEntity<OrderDetailsDTO> viewOrder(@PathVariable Integer orderId){
-
-        OrderDetailsDTO orderDetailsdto = orderDetailsService.viewOrder(orderId);
-
+       
+    	OrderDetailsDTO orderDetailsdto = orderDetailsService.viewOrder(orderId);
         return new ResponseEntity<>(orderDetailsdto,HttpStatus.OK);
 
     }
@@ -72,9 +61,7 @@ public class OrderDetailsController {
     public ResponseEntity<String> removeOrder(@PathVariable Integer orderId){
 
         OrderDetails removedOrder = orderDetailsService.removeOrder(orderId);
-
-        String message = "Order with ID " + orderId + " is deleted";
-        
+        String message = "Order with ID " + orderId + " is deleted"; 
         return new ResponseEntity<>(message, HttpStatus.OK);
 
     }
@@ -99,38 +86,20 @@ public class OrderDetailsController {
     }
     
     
-//    /*------- written by  -----------*/
-//    @GetMapping("/ordersofacustomer/{cartId}")
-//
-//    public ResponseEntity<List<OrderDetailsDTO>> viewOrderOfCustomer(@PathVariable Integer cartId){
-//
-//        List<OrderDetailsDTO> orderDetailsDTO = orderDetailsService.viewOrderOfCustomer(cartId);
-//
-//        return new ResponseEntity<>(orderDetailsDTO,HttpStatus.OK);
-//    }
-//    
-    
-    
     
     @GetMapping("/ordersofarestaurant/{restaurantId}")
     public ResponseEntity<List<ItemsInRestaurantOrderDTO>> viewOrderOfRestaurant(@PathVariable Integer restaurantId) {
     	
         List<ItemsInRestaurantOrderDTO> itemsInRestaurantOrderDTO = orderDetailsService.viewOrderOfRestaurant(restaurantId);
-        
+    
         return new ResponseEntity<>(itemsInRestaurantOrderDTO, HttpStatus.OK);
     }
     
-    
-//  @GetMapping("/ordersofarestaurant/{restaurantId}")
-//  public ResponseEntity<List<ItemsInRestaurantOrderDTO>> viewOrderOfRestaurant(Integer restaurantId){
-//
-//      List<ItemsInRestaurantOrderDTO> ItemsInRestaurantOrderDTO = restaurantOrdersService.viewOrderOfRestaurant(restaurantId);
-//
-//      return new ResponseEntity<>(ItemsInRestaurantOrderDTO,HttpStatus.OK);
-//
-//  }
-    //based on restaurant id we need to filter the items present in the foodcart that is ordered 
-    // Get ordered items based on restaurantId
-  
+    @PutMapping("/updateDeliveryStatus/{itemId}/{deliveryStatus}")
+    public ResponseEntity<UserOrdersDTO> updateDeliveryStatus(@PathVariable Integer itemId, @PathVariable String deliveryStatus) {
+    	UserOrdersDTO updatedOrderDTO = orderDetailsService.updateDeliveryStatus(itemId, deliveryStatus);
+        return ResponseEntity.ok(updatedOrderDTO);
+    }
 
+    
 }

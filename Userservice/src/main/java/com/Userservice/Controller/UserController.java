@@ -88,11 +88,11 @@ public ResponseEntity<?> login(@RequestBody LoginDTO loginRequest) {
             responseDTO.setLastName(userDetails.getLastName());
             responseDTO.setEmail(userDetails.getEmail());
             responseDTO.setPhoneNumber(userDetails.getPhoneNumber());
-            responseDTO.setAddressLine(userDetails.getAddressLine());
-            responseDTO.setCity(userDetails.getCity());
-            responseDTO.setState(userDetails.getState());
-            responseDTO.setCountry(userDetails.getCountry());
-            responseDTO.setPinCode(userDetails.getPinCode());
+//            responseDTO.setAddressLine(userDetails.getAddressLine());
+//            responseDTO.setCity(userDetails.getCity());
+//            responseDTO.setState(userDetails.getState());
+//            responseDTO.setCountry(userDetails.getCountry());
+//            responseDTO.setPinCode(userDetails.getPinCode());
             responseDTO.setFoodCartId(userDetails.getFoodCartId());
  
             return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -129,11 +129,11 @@ public ResponseEntity<?> updateProfile(@PathVariable Integer userId, @Valid @Req
         existingUser.setLastName(responseDTO.getLastName());
         existingUser.setPhoneNumber(responseDTO.getPhoneNumber());
         existingUser.setEmail(responseDTO.getEmail());
-        existingUser.setAddressLine(responseDTO.getAddressLine());
-        existingUser.setCity(responseDTO.getCity());
-        existingUser.setState(responseDTO.getState());
-        existingUser.setCountry(responseDTO.getCountry());
-        existingUser.setPinCode(responseDTO.getPinCode());
+//        existingUser.setAddressLine(responseDTO.getAddressLine());
+//        existingUser.setCity(responseDTO.getCity());
+//        existingUser.setState(responseDTO.getState());
+//        existingUser.setCountry(responseDTO.getCountry());
+//        existingUser.setPinCode(responseDTO.getPinCode());
      // Update user in the database
         registrationService.updateUser(existingUser);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);

@@ -1,6 +1,7 @@
 package com.Foodfunapp.controller;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,13 +42,13 @@ public class PaymentController {
 		}
 	}
 
-	@PostMapping("/transaction")
+	@PostMapping("/createOrder")
 	public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
 		try {
 			OrderRequest response = new OrderRequest();
 			Order order = createRazorPayOrder(orderRequest.getAmount());
 			String orderId = (String) order.get("id");
-			System.out.println("Order ID: " + orderId);
+			//System.out.println("Order ID: " + orderId);
 			response.setRazorpayOrderId(orderId);
 			orderRequest.setRazorpayOrderId(orderId);
 			response.setAmount(orderRequest.getAmount());
@@ -55,6 +56,7 @@ public class PaymentController {
 			response.setEmail(orderRequest.getEmail());
 			response.setPhoneNumber(orderRequest.getPhoneNumber());
 			response.setUserId(orderRequest.getuserId());
+			response.setPaymentId(orderRequest.getPaymentId());
 			paymentRepository.save(orderRequest);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (RazorpayException e) {
@@ -64,16 +66,23 @@ public class PaymentController {
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<?> getOrdersByUserId(@PathVariable Integer userId) {
-		OrderRequest order = paymentRepository.findByUserId(userId);
-		if (order == null) {
-			return new ResponseEntity<>("No orders found for the user", HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<>(order, HttpStatus.OK);
-	}
+    public ResponseEntity<?> getPaymentByUserId(@PathVariable Integer userId) {
+        List<OrderRequest> orders = paymentRepository.findByUserId(userId);
+        if (orders.isEmpty()) {
+            return new ResponseEntity<>("No payments found for user ID: " + userId, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+//	public ResponseEntity<?> getPaymentByUserId(@PathVariable Integer userId) {
+//		OrderRequest order = paymentRepository.findByUserId(userId);
+//		if (order == null) {
+//			return new ResponseEntity<>("No orders found for the user", HttpStatus.NOT_FOUND);
+//		}
+//		return new ResponseEntity<>(order, HttpStatus.OK);
+//	}
 
 	@GetMapping("/paymentdetails/{paymentId}")
-	public ResponseEntity<?> getOrdersByPaymentId(@PathVariable String paymentId) {
+	public ResponseEntity<?> getPaymentByPaymentId(@PathVariable String paymentId) {
 		OrderRequest order = paymentRepository.findByPaymentId(paymentId);
 		if (order == null) {
 			return new ResponseEntity<>("No payment found", HttpStatus.NOT_FOUND);
@@ -81,6 +90,17 @@ public class PaymentController {
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
+    @GetMapping("/paymentdetails/razorpay/{razorpayOrderId}")
+    public ResponseEntity<?> getPaymentByRazorpayOrderId(@PathVariable String razorpayOrderId) {
+        OrderRequest order = paymentRepository.findByRazorpayOrderId(razorpayOrderId);
+        if (order == null) {
+        	 return new ResponseEntity<>("No payment found for razorpayOrderId: " + razorpayOrderId, HttpStatus.NOT_FOUND);
+        	   
+        }
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+    
+    
 	private Order createRazorPayOrder(BigInteger amount) throws RazorpayException {
 		JSONObject options = new JSONObject();
 		options.put("amount", amount.multiply(BigInteger.valueOf(100)));

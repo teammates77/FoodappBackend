@@ -45,23 +45,24 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	}
 
 	@Override
-	public AddOrderDetailsDTO addOrder(Integer cartId, Integer addressId,String paymentId) {
+	public AddOrderDetailsDTO addOrder(Integer cartId, Integer addressId,String razorpayOrderId) {
 		validateCart(cartId);
 
 		Address address = addressService.getAddress(addressId);
-		OrderRequest paymentDetails = paymentService.getOrdersByPaymentId(paymentId);
+		//OrderRequest paymentDetails = paymentService.getPaymentByPaymentId(paymentId);
+		OrderRequest paymentDetails =paymentService.getPaymentByRazorpayOrderId(razorpayOrderId);
 		OrderDetails orderDetails = new OrderDetails();
 		orderDetails.setCartId(cartId);
        
         if (paymentDetails != null) {
             orderDetails.setStatus("Success");
-        } else {
-            orderDetails.setStatus("Pending");
         }
 	
 		orderDetails.setTimeSpan(LocalDateTime.now());
 		orderDetails.setAddressId(addressId);
-		orderDetails.setPaymentId(paymentId);
+		orderDetails.setRazorpayOrderId(razorpayOrderId);
+		orderDetails.setPaymentId(paymentDetails.getPaymentId());;
+		//orderDetails.setPaymentId(paymentId);
 
 		FoodCart foodCart = cartService.getCart(cartId);
 		for (Item foodItem : foodCart.getItems()) {
@@ -107,6 +108,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 			dto.setCost(orderItem.getCost());
 			dto.setRestaurantId(orderItem.getRestaurantId());
 			dto.setDeliveryStatus(orderItem.getDeliveryStatus());
+			dto.setOrderItemId(orderItem.getOrderItemId());
 			Integer addressId = orderItem.getOrderDetails().getAddressId();
 			Address address = addressService.getAddress(addressId);
 			dto.setAddress(address);
@@ -118,8 +120,8 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 
 
 	@Override
-	public UserOrdersDTO updateDeliveryStatus(Integer itemId, String deliveryStatus) {
-		OrderItem orderItem = getOrderItemById(itemId);
+	public UserOrdersDTO updateDeliveryStatus(Integer orderItemId, String deliveryStatus) {
+		OrderItem orderItem = getOrderByOrderItemId(orderItemId);
 		orderItem.setDeliveryStatus(deliveryStatus);
 		orderItemRepository.save(orderItem);
 		return convertToUserOrdersDTO(orderItem);
@@ -148,9 +150,9 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 
 
 
-	private OrderItem getOrderItemById(Integer itemId) {
-		return orderItemRepository.findByItemId(itemId)
-				.orElseThrow(() -> new IllegalArgumentException("Order item not found with ID: " + itemId));
+	private OrderItem getOrderByOrderItemId(Integer orderItemId) {
+		return orderItemRepository.findByOrderItemId(orderItemId)
+				.orElseThrow(() -> new IllegalArgumentException("Order item not found with ID: " + orderItemId));
 	}
 
 	private UserOrdersDTO convertToUserOrdersDTO(OrderItem orderItem) {
@@ -167,6 +169,8 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		dto.setStatus(orderItem.getOrderDetails().getStatus());
 		dto.setOrderId(orderItem.getOrderDetails().getOrderId());
 		dto.setPaymentId(orderItem.getOrderDetails().getPaymentId());
+		dto.setOrderItemId(orderItem.getOrderItemId());
+		//dto.setPaymentId(orderItem.getOrderDetails().getPaymentId());
 	  //dto.setPaymentDetails(paymentDetails);
 		return dto;
 	}
@@ -204,7 +208,8 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		dto.setCartId(orderDetails.getCartId());
 		dto.setStatus(orderDetails.getStatus());
 		dto.setAddressId(orderDetails.getAddressId());
-		dto.setPaymentId(orderDetails.getPaymentId());
+		//dto.setPaymentId(orderDetails.getPaymentId());
+		dto.setRazorpayOrderId(orderDetails.getRazorpayOrderId());
 		dto.setItems(orderDetails.getItems().stream().map(this::convertToDTOitems).collect(Collectors.toList()));
 		return dto;
 	}

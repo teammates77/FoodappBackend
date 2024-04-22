@@ -18,5 +18,5 @@ public class AddOrderDetailsDTO {
 	    private String status;
 	    private List<OrderItemDTO> items;
 	    private Integer addressId;
-	    private String paymentId;
+	    private String razorpayOrderId;
 }

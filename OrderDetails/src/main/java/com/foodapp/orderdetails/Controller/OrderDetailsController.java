@@ -41,9 +41,9 @@ public class OrderDetailsController {
     	}
 
 
-    @PostMapping("/{cartId}/{addressId}/{paymentId}")
-    public ResponseEntity<AddOrderDetailsDTO> addOrder(@PathVariable Integer cartId, @PathVariable Integer addressId,  @PathVariable String paymentId) {
-        AddOrderDetailsDTO savedOrder = orderDetailsService.addOrder(cartId, addressId,paymentId);
+    @PostMapping("/{cartId}/{addressId}/{razorpayOrderId}")
+    public ResponseEntity<AddOrderDetailsDTO> addOrder(@PathVariable Integer cartId, @PathVariable Integer addressId,  @PathVariable String razorpayOrderId) {
+        AddOrderDetailsDTO savedOrder = orderDetailsService.addOrder(cartId, addressId,razorpayOrderId);
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
 
@@ -90,14 +90,13 @@ public class OrderDetailsController {
     @GetMapping("/ordersofarestaurant/{restaurantId}")
     public ResponseEntity<List<ItemsInRestaurantOrderDTO>> viewOrderOfRestaurant(@PathVariable Integer restaurantId) {
     	
-        List<ItemsInRestaurantOrderDTO> itemsInRestaurantOrderDTO = orderDetailsService.viewOrderOfRestaurant(restaurantId);
-    
+        List<ItemsInRestaurantOrderDTO> itemsInRestaurantOrderDTO = orderDetailsService.viewOrderOfRestaurant(restaurantId); 
         return new ResponseEntity<>(itemsInRestaurantOrderDTO, HttpStatus.OK);
     }
     
-    @PutMapping("/updateDeliveryStatus/{itemId}/{deliveryStatus}")
-    public ResponseEntity<UserOrdersDTO> updateDeliveryStatus(@PathVariable Integer itemId, @PathVariable String deliveryStatus) {
-    	UserOrdersDTO updatedOrderDTO = orderDetailsService.updateDeliveryStatus(itemId, deliveryStatus);
+    @PutMapping("/updateDeliveryStatus/{orderItemId}/{deliveryStatus}")
+    public ResponseEntity<UserOrdersDTO> updateDeliveryStatus(@PathVariable Integer orderItemId, @PathVariable String deliveryStatus) {
+    	UserOrdersDTO updatedOrderDTO = orderDetailsService.updateDeliveryStatus(orderItemId, deliveryStatus);
         return ResponseEntity.ok(updatedOrderDTO);
     }
 

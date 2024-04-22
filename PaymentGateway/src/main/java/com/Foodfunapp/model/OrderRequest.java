@@ -42,7 +42,7 @@ public class OrderRequest {
         return userId;
     }
 
-    public void setId(Integer userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

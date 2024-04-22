@@ -20,6 +20,7 @@ public class UserOrdersDTO {
     private String status;
     private String deliveryStatus;
     private Integer orderId;
+    private Integer orderItemId;
     private Integer userid;
     private String paymentId;
 //    @Embedded

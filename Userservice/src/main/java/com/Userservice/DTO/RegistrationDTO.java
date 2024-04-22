@@ -12,11 +12,11 @@ public class RegistrationDTO {
 	private String email;
 	private String phoneNumber;
 	private String password;
-	private String addressLine;
-    private String city;
-    private String state;
-    private String country;
-    private Integer pinCode;
+//	private String addressLine;
+//    private String city;
+//    private String state;
+//    private String country;
+//    private Integer pinCode;
     private Integer foodCartId;
 
 }

@@ -10,6 +10,10 @@ import com.foodapp.orderdetails.model.OrderRequest;
 @FeignClient(name = "payment-service")
 public interface PaymentService {
 
-    @GetMapping("/fooddelivery/payment/paymentdetails/{paymentId}")
-    public OrderRequest getOrdersByPaymentId(@PathVariable String paymentId);
+//    @GetMapping("/fooddelivery/payment/paymentdetails/{paymentId}")
+//    public OrderRequest getPaymentByPaymentId(@PathVariable String paymentId);
+//    
+    @GetMapping("/fooddelivery/payment/paymentdetails/razorpay/{razorpayOrderId}")
+    public  OrderRequest getPaymentByRazorpayOrderId(@PathVariable String razorpayOrderId);
+    
 }

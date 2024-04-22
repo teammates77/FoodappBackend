@@ -39,7 +39,9 @@ public class OrderDetails {
     
     private Integer addressId;
     
-    private String paymentId;
+   private String paymentId;
+    
+    private String razorpayOrderId;
     
     @OneToMany(mappedBy = "orderDetails", cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();

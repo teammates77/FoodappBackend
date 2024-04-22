@@ -13,7 +13,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
 	public List<OrderItem> findByUserId(Integer userId);
 	Optional<OrderItem> findByItemIdAndRestaurantId(Integer itemId, Integer restaurantId);
 	
-	Optional<OrderItem> findByItemId(Integer itemId);
+//	Optional<OrderItem> findByItemId(Integer itemId);
+	Optional<OrderItem> findByOrderItemId(Integer orderItemId);
 
 
 }

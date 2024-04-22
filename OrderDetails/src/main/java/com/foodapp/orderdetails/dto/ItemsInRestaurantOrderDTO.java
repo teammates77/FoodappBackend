@@ -22,6 +22,7 @@ public class ItemsInRestaurantOrderDTO{
 
     private Double cost;
     private String deliveryStatus;
+    private Integer orderItemId;
     
     private Integer restaurantId;
     @Embedded

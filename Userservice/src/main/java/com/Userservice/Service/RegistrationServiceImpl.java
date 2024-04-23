@@ -99,11 +99,6 @@ private final EmailService email;
             userDetails.setLastName(user.getLastName());
             userDetails.setEmail(user.getEmail());
             userDetails.setPhoneNumber(user.getPhoneNumber());
-            userDetails.setAddressLine(user.getAddressLine());
-            userDetails.setCity(user.getCity());
-            userDetails.setState(user.getState());
-            userDetails.setCountry(user.getCountry());
-            userDetails.setPinCode(user.getPinCode());
             userDetails.setFoodCartId(user.getFoodCartId());
 
             return userDetails;
@@ -121,11 +116,6 @@ private final EmailService email;
         registrationDTO.setEmail(user.getEmail());
         registrationDTO.setPhoneNumber(user.getPhoneNumber());
         registrationDTO.setPassword(user.getPassword());
-        registrationDTO.setAddressLine(user.getAddressLine());
-        registrationDTO.setCity(user.getCity());
-        registrationDTO.setState(user.getState());
-        registrationDTO.setCountry(user.getCountry());
-        registrationDTO.setPinCode(user.getPinCode());
         registrationDTO.setFoodCartId(user.getFoodCartId());
 
         return registrationDTO;
@@ -142,11 +132,6 @@ private final EmailService email;
 	        userDetails.setLastName(user.getLastName());
 	        userDetails.setEmail(user.getEmail());
 	        userDetails.setPhoneNumber(user.getPhoneNumber());
-	        userDetails.setAddressLine(user.getAddressLine());
-            userDetails.setCity(user.getCity());
-            userDetails.setState(user.getState());
-            userDetails.setCountry(user.getCountry());
-            userDetails.setPinCode(user.getPinCode());
             userDetails.setFoodCartId(user.getFoodCartId());
 	        
 	        return userDetails;
